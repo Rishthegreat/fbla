@@ -1,7 +1,18 @@
-import {Welcome} from "./src/screens";
+/* eslint-disable */
+
+import {LogIn, Welcome} from './src/screens';
+import {SafeAreaView, StyleSheet} from 'react-native';
 
 export const App = () => {
-    return (
-        <Welcome /> // later check if logged in and then render the homepage for the app instead of welcome
-    )
-}
+  return (
+    <SafeAreaView style={styles.root}>
+      <LogIn />
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+});
