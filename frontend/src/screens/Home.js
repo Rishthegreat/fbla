@@ -23,7 +23,7 @@ const MainPage = ({navigation}) => {
     return (
         <View>
             <Text>You are logged in</Text>
-            <Text onPress={logout}>Logout</Text>
+            <Text onPress={logout}>Log Out</Text>
         </View>
     )
 }

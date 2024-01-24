@@ -49,7 +49,7 @@ export const Signup = ({navigation}) => {
             <CustomInput value={password} setValue={setPassword} placeholder={'Password'} secureTextEntry={true}/>
             <CustomInput value={confirmPassword} setValue={setConfirmPassword} placeholder={'Confirm Password'}
                          secureTextEntry={true}/>
-            <CustomButton text={'Signup'}/>
+            <CustomButton text={'Sign Up'}/>
             <View id={'errors'} style={styles.errors}>
                 <Text ref={length8} style={styles.error_text}>Password needs to be at least 8 characters long</Text>
                 <Text ref={passMatch} style={styles.error_text}>Passwords need to match</Text>
