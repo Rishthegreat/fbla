@@ -1,2 +1,2 @@
-export * from '../screens/Welcome';
-export * from '../screens/Login';
+export * from './Home';
+export * from './Authorization';

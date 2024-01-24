@@ -3,9 +3,9 @@
 import {View, Text, StyleSheet, Pressable} from "react-native";
 import {designChoices} from "../../GlobalConsts";
 
-export const CustomButton = ({text, onPress}) => {
+export const CustomButton = ({text, onPress, style}) => {
     return (
-        <Pressable onPress={onPress} style={styles.container}>
+        <Pressable onPress={onPress} style={{...styles.container, ...style}}>
             <Text style={styles.text}>{text}</Text>
         </Pressable>
     )
