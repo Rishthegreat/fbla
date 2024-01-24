@@ -9,3 +9,4 @@ local.properties
 !debug.keystore
 /backend/venv/
 /node_modules/
+frontend/running instructions.txt
