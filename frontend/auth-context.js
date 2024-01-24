@@ -1,12 +1,10 @@
 /* eslint-disable */
 import {createContext, useEffect, useState} from "react";
-import MMKVStorage, {MMKVLoader, useMMKVStorage} from "react-native-mmkv-storage";
 
 export const AuthContext = createContext()
 
 export const AuthProvider = ({children}) => {
-    const storage = new MMKVLoader().initialize()
-    const [userToken, setUserToken] = new useMMKVStorage('userToken', storage, null)
+    const [userToken, setUserToken] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const login = () => {
         setIsLoading(true)
