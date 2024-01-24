@@ -8,3 +8,4 @@ local.properties
 *.keystore
 !debug.keystore
 /backend/venv/
+/node_modules/
