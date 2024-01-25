@@ -23,9 +23,14 @@ export const BottomNav = ({navigation}) => {
                     <IconWithText text={'Home'} icon={'home'} />
                 </TouchableOpacity>
                 <IconWithText text={'Post'} icon={'plus'} />
-                <IconWithText text={'Profile'} icon={'user'} />
+                <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+                    <IconWithText text={'Profile'} icon={'user'} />
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('AppSettings')}>
                     <IconWithText text={'Settings'} icon={'setting'} />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <IconWithText text='Colleges' icon={'book'} />
                 </TouchableOpacity>
             </View>
         </View>

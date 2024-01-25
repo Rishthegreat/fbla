@@ -9,6 +9,7 @@ import {AuthContext} from "../../auth-context";
 export const Login = ({navigation}) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
     const {login} = useContext(AuthContext)
     const login_user = () => {
         login()
@@ -25,6 +26,8 @@ export const Login = ({navigation}) => {
 }
 
 export const Signup = ({navigation}) => {
+    const [firstname, setFirstName] = useState('')
+    const [lastname, setLastName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -45,6 +48,8 @@ export const Signup = ({navigation}) => {
     return (
         <View style={styles.root}>
             <Image source={Logo} style={styles.logo} resizeMode={'contain'}/>
+            <CustomInput value={firstname} setValue={setFirstName} placeholder={'First Name'}/>
+            <CustomInput value={lastname} setValue={setLastName} placeholder={'Last Name'}/>
             <CustomInput value={email} setValue={setEmail} placeholder={'Email'}/>
             <CustomInput value={password} setValue={setPassword} placeholder={'Password'} secureTextEntry={true}/>
             <CustomInput value={confirmPassword} setValue={setConfirmPassword} placeholder={'Confirm Password'}
