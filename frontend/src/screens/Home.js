@@ -1,11 +1,13 @@
 /* eslint-disable */
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {useContext} from "react";
 import {AuthContext} from "../../auth-context";
+import {AppSettings} from "./AppSettings";
+import {BottomNav, TopNav} from "../components";
 
 const Welcome = ({navigation}) => {
     return (
-        <View>
+        <View style={styles.root}>
             <Text>Welcome to our application</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                 <Text>Log In</Text>
@@ -21,9 +23,13 @@ const MainPage = ({navigation}) => {
     const {userToken, login, logout} = useContext(AuthContext)
 
     return (
-        <View>
+        <View style={styles.root}>
+            <TopNav />
             <Text>You are logged in</Text>
-            <Text onPress={logout}>Log Out</Text>
+            <AppSettings />
+            <View style={styles.bottom_nav_container}>
+                <BottomNav />
+            </View>
         </View>
     )
 }
@@ -35,3 +41,15 @@ export const Home = ({navigation}) => {
         </View>
     )
 };
+
+const styles = StyleSheet.create({
+    root: {
+        marginHorizontal: 20,
+        height: '100%'
+    },
+    bottom_nav_container: {
+        position: "absolute",
+        bottom: 10,
+        width: '100%'
+    }
+})
