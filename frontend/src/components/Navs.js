@@ -1,5 +1,5 @@
 /* eslint-disable */
-import {Image, StyleSheet, TouchableOpacity, View} from "react-native";
+import {Image, StyleSheet, TouchableOpacity, View, Text} from "react-native";
 import {IconWithText} from "../components";
 import Icon from "react-native-vector-icons/AntDesign";
 
