@@ -4,6 +4,9 @@ import {useContext} from "react";
 import {AuthContext} from "../../auth-context";
 import {AppSettings} from "./AppSettings";
 import {BottomNav, TopNav} from "../components";
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import {NavigationContainer, useNavigation} from "@react-navigation/native";
+import {Homepage} from "./Homepage";
 
 const Welcome = ({navigation}) => {
     return (
@@ -19,25 +22,26 @@ const Welcome = ({navigation}) => {
     );
 }
 
-const MainPage = ({navigation}) => {
+const TabsStack = createNativeStackNavigator()
+const MainApp = ({navigation}) => {
     const {userToken, login, logout} = useContext(AuthContext)
-
     return (
         <View style={styles.root}>
-            <TopNav />
-            <Text>You are logged in</Text>
-            <AppSettings />
+            <TabsStack.Navigator initialRouteName='Home'>
+                <TabsStack.Screen name='Homepage' options={{headerShown: false}} component={Homepage}/>
+                <TabsStack.Screen name='AppSettings' options={{headerShown: false}} component={AppSettings}/>
+            </TabsStack.Navigator>
             <View style={styles.bottom_nav_container}>
-                <BottomNav />
+                <BottomNav navigation={navigation} />
             </View>
         </View>
     )
 }
-export const Home = ({navigation}) => {
+export const MainScreen = ({navigation}) => {
     const {userToken} = useContext(AuthContext)
     return (
         <View>
-            {userToken !== null ? <MainPage navigation={navigation} /> : <Welcome navigation={navigation} />}
+            {userToken !== null ? <MainApp navigation={navigation} /> : <Welcome navigation={navigation} />}
         </View>
     )
 };

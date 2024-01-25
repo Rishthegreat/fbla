@@ -1,23 +1,32 @@
 /* eslint-disable */
-import {StyleSheet, View} from "react-native";
+import {Image, StyleSheet, TouchableOpacity, View} from "react-native";
 import {IconWithText} from "../components";
+import Icon from "react-native-vector-icons/AntDesign";
 
 export const TopNav = () => {
     return (
         <View>
-
+            <View>
+                <View>
+                    <Icon name={'search1'} size={20} color={'#000000'} />
+                </View>
+            </View>
         </View>
     )
 }
 
-export const BottomNav = () => {
+export const BottomNav = ({navigation}) => {
     return (
         <View style={styles.bottom_nav_big_container}>
             <View style={styles.bottom_nav_container}>
-                <IconWithText text={'Home'} icon={'home'} />
+                <TouchableOpacity onPress={() => navigation.navigate('Homepage')}>
+                    <IconWithText text={'Home'} icon={'home'} />
+                </TouchableOpacity>
                 <IconWithText text={'Post'} icon={'plus'} />
                 <IconWithText text={'Profile'} icon={'user'} />
-                <IconWithText text={'Settings'} icon={'setting'} />
+                <TouchableOpacity onPress={() => navigation.navigate('AppSettings')}>
+                    <IconWithText text={'Settings'} icon={'setting'} />
+                </TouchableOpacity>
             </View>
         </View>
     )

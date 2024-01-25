@@ -12,7 +12,7 @@ export const Login = ({navigation}) => {
     const {login} = useContext(AuthContext)
     const login_user = () => {
         login()
-        navigation.navigate('Home')
+        navigation.navigate('MainScreen')
     }
     return (
         <View style={styles.root}>
