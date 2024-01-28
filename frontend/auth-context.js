@@ -7,6 +7,7 @@ const storage = new MMKV()
 export const AuthProvider = ({children}) => {
     const [userToken, setUserToken] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
+    const [currentTab, setCurrentTab] = useState(null)
     const login = () => {
         setIsLoading(true)
         setUserToken('asdkfadfasdfkjh') //later use actual token
@@ -41,7 +42,7 @@ export const AuthProvider = ({children}) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{login, logout, userToken}}>
+        <AuthContext.Provider value={{login, logout, userToken, currentTab, setCurrentTab}}>
             {children}
         </AuthContext.Provider>
     )

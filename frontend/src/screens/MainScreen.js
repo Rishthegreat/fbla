@@ -26,12 +26,14 @@ const TabsStack = createNativeStackNavigator()
 const MainApp = ({navigation}) => {
     const {userToken, login, logout} = useContext(AuthContext)
     return (
-        <View style={styles.root}>
-            <TabsStack.Navigator initialRouteName='Homepage'>
-                <TabsStack.Screen name='Homepage' options={{headerShown: false}} component={Homepage}/>
-                <TabsStack.Screen name='AppSettings' options={{headerShown: false}} component={AppSettings}/>
-                <TabsStack.Screen name='Profile' options={{headerShown: false}} component={Profile}/>
-            </TabsStack.Navigator>
+        <View>
+            <View style={styles.root}>
+                <TabsStack.Navigator initialRouteName='Homepage'>
+                    <TabsStack.Screen name='Homepage' options={{headerShown: false}} component={Homepage}/>
+                    <TabsStack.Screen name='AppSettings' options={{headerShown: false}} component={AppSettings}/>
+                    <TabsStack.Screen name='Profile' options={{headerShown: false}} component={Profile}/>
+                </TabsStack.Navigator>
+            </View>
             <View style={styles.bottom_nav_container}>
                 <BottomNav navigation={navigation} />
             </View>
@@ -54,7 +56,7 @@ const styles = StyleSheet.create({
     },
     bottom_nav_container: {
         position: "absolute",
-        bottom: 10,
+        bottom: 0,
         width: '100%'
     }
 })

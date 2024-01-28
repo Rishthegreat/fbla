@@ -1,7 +1,14 @@
 /* eslint-disable */
 import {View, Text} from "react-native";
+import {useCallback, useContext, useEffect} from "react";
+import {AuthContext} from "../../auth-context";
+import {useFocusEffect} from "@react-navigation/native";
 
 export const Profile = ({navigation}) => {
+    const {setCurrentTab} = useContext(AuthContext)
+    useFocusEffect ( // Run each time the tab is loaded
+        useCallback(() => setCurrentTab('Profile'), [])
+    )
     return (
         <View>
             <View>{/* User Information */}
@@ -14,7 +21,7 @@ export const Profile = ({navigation}) => {
                 <View>{/* School */}
 
                 </View>
-                <View>{/* Colleges I'm Thinking A */}
+                <View>{/* Colleges I'm Thinking About */}
 
                 </View>
             </View>

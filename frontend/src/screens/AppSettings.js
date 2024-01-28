@@ -1,10 +1,11 @@
 /* eslint-disable */
 
-import {useContext} from "react";
+import {useCallback, useContext, useEffect} from "react";
 import {AuthContext} from "../../auth-context";
 import {CustomButton} from "../components";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import TempLogo from '../../assets/images/Logo.png'
+import {useFocusEffect} from "@react-navigation/native";
 
 const IndividualSetting = ({name}) => {
     return (
@@ -25,7 +26,10 @@ const settingStyles = StyleSheet.create({
 })
 
 export const AppSettings = ({navigation}) => {
-    const {logout} = useContext(AuthContext)
+    const {logout, setCurrentTab} = useContext(AuthContext)
+    useFocusEffect ( // Run each time the tab is loaded
+        useCallback(() => setCurrentTab('AppSettings'), [])
+    )
     return (
         <View style={styles.root}>
             <Image source={TempLogo} style={styles.user_pic} resizeMode='contain' />
