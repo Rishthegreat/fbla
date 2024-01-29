@@ -3,7 +3,7 @@
 import {View, Text, StyleSheet} from "react-native";
 import {TopNav} from "../components";
 import {useCallback, useContext, useEffect} from "react";
-import {AuthContext} from "../../auth-context";
+import {AuthContext} from "../contexes/auth-context";
 import {useFocusEffect} from "@react-navigation/native";
 
 

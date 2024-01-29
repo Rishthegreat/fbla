@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import {useCallback, useContext, useEffect} from "react";
-import {AuthContext} from "../../auth-context";
+import {AuthContext} from "../contexes/auth-context";
 import {CustomButton} from "../components";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import TempLogo from '../../assets/images/Logo.png'

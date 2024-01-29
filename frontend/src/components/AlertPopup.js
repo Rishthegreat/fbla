@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import {Animated, StyleSheet, Text, View} from "react-native";
-import {useAlert} from "../../useAlert";
+import {useAlert} from "../hooks/useAlert";
 import {designChoices} from "../../GlobalConsts";
 import {useEffect, useState} from "react";
 

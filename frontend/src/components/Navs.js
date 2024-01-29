@@ -4,7 +4,7 @@ import {IconWithText} from "../components";
 import Icon from "react-native-vector-icons/AntDesign";
 import {designChoices} from "../../GlobalConsts";
 import {useContext} from "react";
-import {AuthContext} from "../../auth-context";
+import {AuthContext} from "../contexes/auth-context";
 
 export const TopNav = () => {
     return (

@@ -4,10 +4,10 @@ import {Login, Signup, MainScreen, AppSettings} from './src/screens';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import {AuthProvider} from "./auth-context";
+import {AuthProvider} from "./src/contexes/auth-context";
 import {ApolloClient, InMemoryCache, ApolloProvider, useLazyQuery} from '@apollo/client';
 import {backendLink} from "./GlobalConsts";
-import {AlertProvider} from "./AlertContext";
+import {AlertProvider} from "./src/contexes/AlertContext";
 import {AlertPopup} from "./src/components";
 
 const Stack = createNativeStackNavigator()

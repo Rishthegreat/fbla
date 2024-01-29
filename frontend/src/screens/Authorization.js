@@ -4,10 +4,10 @@ import Logo from '../../assets/images/Logo.png'
 import {CustomButton, CustomInput} from "../components"
 import {useContext, useEffect, useRef, useState} from "react";
 import {designChoices} from "../../GlobalConsts";
-import {AuthContext} from "../../auth-context";
+import {AuthContext} from "../contexes/auth-context";
 import {useMutation} from "@apollo/client";
 import {CREATE_USER, LOGIN_USER} from "../graphql";
-import {useAlert} from "../../useAlert";
+import {useAlert} from "../hooks/useAlert";
 
 export const Login = ({navigation}) => {
     const [email, setEmail] = useState('')

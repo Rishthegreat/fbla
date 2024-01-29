@@ -1,7 +1,7 @@
 /* eslint-disable */
 import {View, Text} from "react-native";
 import {useCallback, useContext, useEffect} from "react";
-import {AuthContext} from "../../auth-context";
+import {AuthContext} from "../contexes/auth-context";
 import {useFocusEffect} from "@react-navigation/native";
 
 export const Profile = ({navigation}) => {

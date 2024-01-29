@@ -1,6 +1,6 @@
 /* eslint-disable */
 
 import {useContext} from "react";
-import {AlertContext} from "./AlertContext";
+import {AlertContext} from "../contexes/AlertContext";
 
 export const useAlert = () => useContext(AlertContext)

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {useContext} from "react";
-import {AuthContext} from "../../auth-context";
+import {AuthContext} from "../contexes/auth-context";
 import {AppSettings} from "./AppSettings";
 import {BottomNav, TopNav} from "../components";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
