@@ -5,6 +5,8 @@ import {CustomButton, CustomInput} from "../components"
 import {useContext, useEffect, useRef, useState} from "react";
 import {designChoices} from "../../GlobalConsts";
 import {AuthContext} from "../../auth-context";
+import {useLazyQuery, useMutation} from "@apollo/client";
+import {CREATE_USER} from "../graphql";
 
 export const Login = ({navigation}) => {
     const [email, setEmail] = useState('')
@@ -26,8 +28,8 @@ export const Login = ({navigation}) => {
 }
 
 export const Signup = ({navigation}) => {
-    const [firstname, setFirstName] = useState('')
-    const [lastname, setLastName] = useState('')
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -36,6 +38,7 @@ export const Signup = ({navigation}) => {
     }
     const length8 = useRef(null)
     const passMatch = useRef(null)
+    const [signUpMutation, {loading, error, data}] = useMutation(CREATE_USER)
     useEffect(() => {
         length8.current.setNativeProps({
             style: {color: password.length >= 8 ? 'green' : 'red'}
@@ -44,17 +47,24 @@ export const Signup = ({navigation}) => {
             style: {color: password === confirmPassword && password.length > 0 ? 'green' : 'red'}
         })
     }, [password, confirmPassword]);
-
+    const signUp = () => {
+        try {
+            signUpMutation({variables: {email, password, firstName, lastName}})
+                .then(() => console.log(data))
+        } catch (e) {
+            console.log(e)
+        }
+    }
     return (
         <View style={styles.root}>
             <Image source={Logo} style={styles.logo} resizeMode={'contain'}/>
-            <CustomInput value={firstname} setValue={setFirstName} placeholder={'First Name'}/>
-            <CustomInput value={lastname} setValue={setLastName} placeholder={'Last Name'}/>
+            <CustomInput value={firstName} setValue={setFirstName} placeholder={'First Name'}/>
+            <CustomInput value={lastName} setValue={setLastName} placeholder={'Last Name'}/>
             <CustomInput value={email} setValue={setEmail} placeholder={'Email'}/>
             <CustomInput value={password} setValue={setPassword} placeholder={'Password'} secureTextEntry={true}/>
             <CustomInput value={confirmPassword} setValue={setConfirmPassword} placeholder={'Confirm Password'}
                          secureTextEntry={true}/>
-            <CustomButton text={'Sign Up'}/>
+            <CustomButton text={'Sign Up'} onPress={signUp}/>
             <View id={'errors'} style={styles.errors}>
                 <Text ref={length8} style={styles.error_text}>Password needs to be at least 8 characters long</Text>
                 <Text ref={passMatch} style={styles.error_text}>Passwords need to match</Text>

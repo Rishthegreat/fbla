@@ -8,4 +8,6 @@ export const designChoices = {
     almostBlack: '#001026'
 }
 
-export const backendLink = 'http://127.0.0.1:5000/graphql'
+export const backendLink = 'http://192.168.68.70:5000/graphql' // Make sure you change the local ip address to match yous. Localhost will not work
+
+
