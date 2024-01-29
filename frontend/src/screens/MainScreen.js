@@ -57,6 +57,6 @@ const styles = StyleSheet.create({
     bottom_nav_container: {
         position: "absolute",
         bottom: 0,
-        width: '100%'
+        width: '100%',
     }
 })

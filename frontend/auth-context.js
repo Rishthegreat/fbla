@@ -8,10 +8,10 @@ export const AuthProvider = ({children}) => {
     const [userToken, setUserToken] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [currentTab, setCurrentTab] = useState(null)
-    const login = () => {
+    const login = (token) => {
         setIsLoading(true)
-        setUserToken('asdkfadfasdfkjh') //later use actual token
-        storage.set('userToken', 'asdkfadfasdfkjh')
+        setUserToken(token) //later use actual token
+        storage.set('userToken', token)
         setIsLoading(false)
     }
     const logout = () => {

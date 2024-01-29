@@ -5,17 +5,31 @@ import {CustomButton, CustomInput} from "../components"
 import {useContext, useEffect, useRef, useState} from "react";
 import {designChoices} from "../../GlobalConsts";
 import {AuthContext} from "../../auth-context";
-import {useLazyQuery, useMutation} from "@apollo/client";
-import {CREATE_USER} from "../graphql";
+import {useMutation} from "@apollo/client";
+import {CREATE_USER, LOGIN_USER} from "../graphql";
+import {useAlert} from "../../useAlert";
 
 export const Login = ({navigation}) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-
+    const [loginMutation, {loading, error, data}] = useMutation(LOGIN_USER)
+    const {setAlert} = useAlert()
     const {login} = useContext(AuthContext)
     const login_user = () => {
-        login()
-        navigation.navigate('MainScreen')
+        try {
+            loginMutation({variables: {email, password}})
+                .then((r) => {
+                    if (r.data.loginUser.accessToken) {
+                        login(r.data.loginUser.accessToken)
+                        setAlert('Login Successful!', 'success')
+                        navigation.navigate('MainScreen')
+                    } else {
+                        setAlert('Invalid Credentials! Try again.', 'error')
+                    }
+                })
+        } catch (e) {
+            setAlert(e, 'error')
+        }
     }
     return (
         <View style={styles.root}>
@@ -23,6 +37,7 @@ export const Login = ({navigation}) => {
             <CustomInput value={email} setValue={setEmail} placeholder={'Email'}/>
             <CustomInput value={password} setValue={setPassword} placeholder={'Password'} secureTextEntry={true}/>
             <CustomButton onPress={login_user} text={'Log In'}/>
+            <Text>Don't have an account yet? <Text onPress={() => navigation.navigate('Signup')}>Signup</Text></Text>
         </View>
     )
 }
@@ -38,7 +53,7 @@ export const Signup = ({navigation}) => {
     }
     const length8 = useRef(null)
     const passMatch = useRef(null)
-    const [signUpMutation, {loading, error, data}] = useMutation(CREATE_USER)
+    const [signupMutation, {loading, error, data}] = useMutation(CREATE_USER)
     useEffect(() => {
         length8.current.setNativeProps({
             style: {color: password.length >= 8 ? 'green' : 'red'}
@@ -47,12 +62,24 @@ export const Signup = ({navigation}) => {
             style: {color: password === confirmPassword && password.length > 0 ? 'green' : 'red'}
         })
     }, [password, confirmPassword]);
+    const {setAlert} = useAlert()
     const signUp = () => {
-        try {
-            signUpMutation({variables: {email, password, firstName, lastName}})
-                .then(() => console.log(data))
-        } catch (e) {
-            console.log(e)
+        if ((password.length < 8) || (password !== confirmPassword) || (email === '') || (firstName === '') || (lastName === '')) {
+            setAlert('Please fill in all the fields properly!', 'error')
+        } else {
+            try {
+                signupMutation({variables: {email, password, firstName, lastName}})
+                    .then((r) => {
+                        if (r.data.createUser.success === "true") {
+                            setAlert('Signup Successful', 'success')
+                            navigation.navigate('Login')
+                        } else {
+                            setAlert(r.data.createUser.message, 'error')
+                        }
+                    })
+            } catch (e) {
+                setAlert(e, 'error')
+            }
         }
     }
     return (

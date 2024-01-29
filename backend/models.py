@@ -26,15 +26,18 @@ class CreateUser(graphene.Mutation):
     class Arguments:
         userData = UserType(required=True)
 
-    user = graphene.Field(lambda: User)
+    success = graphene.String()
+    message = graphene.String()
 
     def mutate(self, info, userData):
         hashed_password = hashpw(userData['password'].encode('utf-8'), gensalt())
         userData['password'] = hashed_password.decode('utf-8')
         usersCollection = db["users"]
-        inserted_id = usersCollection.insert_one(userData).inserted_id
-        userData['_id'] = str(inserted_id)
-        return CreateUser(user=User(**userData))
+        if usersCollection.count_documents({"email": userData['email']}, limit=1) == 0:
+            inserted_id = usersCollection.insert_one(userData).inserted_id
+            userData['_id'] = str(inserted_id)
+            return CreateUser(success=True, message=None)
+        return CreateUser(success=False, message="Email Already Exists. Please Sign In")
 
 
 class LoginUser(graphene.Mutation):

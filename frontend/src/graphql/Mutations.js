@@ -10,12 +10,22 @@ export const CREATE_USER = gql`
                 lastName: $lastName
             }
         ) {
+            success
+            message
+        }
+    }
+`
+
+export const LOGIN_USER = gql`
+    mutation LoginUser($email: String!, $password: String!) {
+        loginUser(email: $email, password: $password) {
             user {
                 firstName
-                Id
-                email
                 lastName
+                email
+                Id
             }
+            accessToken
         }
     }
 `
