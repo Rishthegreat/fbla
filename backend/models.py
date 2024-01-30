@@ -2,6 +2,7 @@ import graphene
 from pymongo import MongoClient
 from bcrypt import hashpw, gensalt
 from flask_jwt_extended import create_access_token
+from bson.objectid import ObjectId
 
 client = MongoClient("mongodb://localhost:27017/")
 db = client["fbla"]
@@ -34,8 +35,7 @@ class CreateUser(graphene.Mutation):
         userData['password'] = hashed_password.decode('utf-8')
         usersCollection = db["users"]
         if usersCollection.count_documents({"email": userData['email']}, limit=1) == 0:
-            inserted_id = usersCollection.insert_one(userData).inserted_id
-            userData['_id'] = str(inserted_id)
+            usersCollection.insert_one(userData)
             return CreateUser(success=True, message=None)
         return CreateUser(success=False, message="Email Already Exists. Please Sign In")
 
@@ -58,14 +58,21 @@ class LoginUser(graphene.Mutation):
             return LoginUser(accessToken=accessToken, user=User(**userData))
         return LoginUser(accessToken=None, user=None)
 
-
 class Query(graphene.ObjectType):
-    users = graphene.List(User)
+    getAllUsers = graphene.List(User)
+    getUserById = graphene.Field(lambda: User, _id=graphene.String(required=True))
 
-    def resolve_users(self, info):
+    def resolve_getAllUsers(self, info):
         usersCollection = db["users"]
+        print(list(usersCollection.find()))
         return list(usersCollection.find())
 
+    def resolve_getUserById(self, info, _id):
+        usersCollection = db["users"]
+        user_data = usersCollection.find_one({"_id": ObjectId(_id)})
+        if user_data:
+            return User(**user_data)
+        return None
 
 class Mutation(graphene.ObjectType):
     createUser = CreateUser.Field()

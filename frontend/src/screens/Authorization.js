@@ -1,9 +1,8 @@
 /* eslint-disable */
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import {Image, StyleSheet, Text, View} from 'react-native'
 import Logo from '../../assets/images/Logo.png'
 import {CustomButton, CustomInput} from "../components"
 import {useContext, useEffect, useRef, useState} from "react";
-import {designChoices} from "../../GlobalConsts";
 import {AuthContext} from "../contexes/auth-context";
 import {useMutation} from "@apollo/client";
 import {CREATE_USER, LOGIN_USER} from "../graphql";
