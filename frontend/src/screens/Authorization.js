@@ -16,7 +16,7 @@ export const Login = ({navigation}) => {
     const {login} = useContext(AuthContext)
     const login_user = () => {
         try {
-            loginMutation({variables: {email, password}, onCompleted: (r) => {
+            loginMutation({variables: {email, password}, fetchPolicy: "no-cache" , onCompleted: (r) => {
                     if (r.loginUser.accessToken) {
                         login(r.loginUser.accessToken, r.loginUser.user._id)
                         setAlert('Login Successful!', 'success')
@@ -66,7 +66,7 @@ export const Signup = ({navigation}) => {
             setAlert('Please fill in all the fields properly!', 'error')
         } else {
             try {
-                signupMutation({variables: {email, password, firstName, lastName}, onCompleted: r => {
+                signupMutation({variables: {email, password, firstName, lastName}, fetchPolicy: "no-cache",onCompleted: r => {
                         if (r.createUser.success === "true") {
                             setAlert('Signup Successful', 'success')
                             navigation.navigate('Login')

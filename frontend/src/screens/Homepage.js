@@ -5,13 +5,17 @@ import {TopNav} from "../components";
 import {useCallback, useContext, useEffect} from "react";
 import {AuthContext} from "../contexes/auth-context";
 import {useFocusEffect} from "@react-navigation/native";
+import {useAlert} from "../hooks/useAlert";
 
 
 export const Homepage = ({navigation}) => {
     const {setCurrentTab} = useContext(AuthContext)
     useFocusEffect ( // Run each time the tab is loaded
-        useCallback(() => setCurrentTab('Homepage'), [])
+        useCallback(() => {
+            setCurrentTab('Homepage')
+        }, [])
     )
+
     return (
         <View>
             <View>
