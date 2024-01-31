@@ -1,3 +1,4 @@
+from datetime import timedelta
 from flask import Flask
 from flask_cors import CORS
 import models as md
@@ -7,6 +8,7 @@ from flask_jwt_extended import JWTManager
 app = Flask(__name__)
 CORS(app)
 app.config['JWT_SECRET_KEY'] = 'yooo this app is so cool'
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
 jwt = JWTManager(app)
 
 

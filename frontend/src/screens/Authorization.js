@@ -11,21 +11,20 @@ import {useAlert} from "../hooks/useAlert";
 export const Login = ({navigation}) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [loginMutation, {loading, error, data}] = useMutation(LOGIN_USER)
+    const [loginMutation] = useMutation(LOGIN_USER)
     const {setAlert} = useAlert()
     const {login} = useContext(AuthContext)
     const login_user = () => {
         try {
-            loginMutation({variables: {email, password}})
-                .then((r) => {
-                    if (r.data.loginUser.accessToken) {
-                        login(r.data.loginUser.accessToken)
+            loginMutation({variables: {email, password}, onCompleted: (r) => {
+                    if (r.loginUser.accessToken) {
+                        login(r.loginUser.accessToken, r.loginUser.user._id)
                         setAlert('Login Successful!', 'success')
                         navigation.navigate('MainScreen')
                     } else {
                         setAlert('Invalid Credentials! Try again.', 'error')
                     }
-                })
+                }})
         } catch (e) {
             setAlert(e, 'error')
         }
@@ -67,15 +66,14 @@ export const Signup = ({navigation}) => {
             setAlert('Please fill in all the fields properly!', 'error')
         } else {
             try {
-                signupMutation({variables: {email, password, firstName, lastName}})
-                    .then((r) => {
-                        if (r.data.createUser.success === "true") {
+                signupMutation({variables: {email, password, firstName, lastName}, onCompleted: r => {
+                        if (r.createUser.success === "true") {
                             setAlert('Signup Successful', 'success')
                             navigation.navigate('Login')
                         } else {
-                            setAlert(r.data.createUser.message, 'error')
+                            setAlert(r.createUser.message, 'error')
                         }
-                    })
+                    }})
             } catch (e) {
                 setAlert(e, 'error')
             }

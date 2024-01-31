@@ -1,13 +1,22 @@
 /* eslint-disable */
 import {View, Text} from "react-native";
-import {useCallback, useContext, useEffect} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 import {AuthContext} from "../contexes/auth-context";
 import {useFocusEffect} from "@react-navigation/native";
+import {useLazyQuery} from "@apollo/client";
+import {PROFILE_BY_ID} from "../graphql";
 
 export const Profile = ({navigation}) => {
-    const {setCurrentTab} = useContext(AuthContext)
+    const {setCurrentTab, _id} = useContext(AuthContext)
+    const [profileQuery] = useLazyQuery(PROFILE_BY_ID)
+    const [profile, setProfile] = useState(null)
     useFocusEffect ( // Run each time the tab is loaded
-        useCallback(() => setCurrentTab('Profile'), [])
+        useCallback(() => {
+            setCurrentTab('Profile')
+            profileQuery({variables: {_id}, onCompleted: r => {
+                    setProfile(r.user.profile)
+                }})
+        }, [])
     )
     return (
         <View>

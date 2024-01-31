@@ -8,15 +8,20 @@ export const AuthProvider = ({children}) => {
     const [userToken, setUserToken] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [currentTab, setCurrentTab] = useState(null)
-    const login = (token) => {
+    const [_id, set_id] = useState(null)
+    const login = (token, id) => {
         setIsLoading(true)
-        setUserToken(token) //later use actual token
+        setUserToken(token)
+        set_id(id)
+        storage.set('_id', id)
         storage.set('userToken', token)
         setIsLoading(false)
     }
     const logout = () => {
         setIsLoading(true)
         setUserToken(null)
+        set_id(null)
+        storage.delete('_id')
         storage.delete('userToken')
         setIsLoading(false)
     }
@@ -25,10 +30,11 @@ export const AuthProvider = ({children}) => {
         try {
             setIsLoading(true)
             if (storage.contains('userToken')) {
-                let userToken = storage.getString('userToken')
-                setUserToken(userToken)
+                setUserToken(storage.getString('userToken'))
+                set_id(storage.getString('_id'))
             } else {
                 setUserToken(null)
+                set_id(null)
             }
             setIsLoading(false)
         } catch (e) {
@@ -42,7 +48,7 @@ export const AuthProvider = ({children}) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{login, logout, userToken, currentTab, setCurrentTab}}>
+        <AuthContext.Provider value={{login, logout, userToken, currentTab, setCurrentTab, _id}}>
             {children}
         </AuthContext.Provider>
     )

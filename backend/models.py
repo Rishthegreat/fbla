@@ -1,7 +1,7 @@
 import graphene
 from pymongo import MongoClient
 from bcrypt import hashpw, gensalt
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required
 from bson.objectid import ObjectId
 
 client = MongoClient("mongodb://localhost:27017/")
@@ -9,14 +9,20 @@ db = client["fbla"]
 
 
 class User(graphene.ObjectType):
-    _id = graphene.NonNull(graphene.String)
-    email = graphene.NonNull(graphene.String)
-    password = graphene.NonNull(graphene.String)
-    firstName = graphene.NonNull(graphene.String)
-    lastName = graphene.NonNull(graphene.String)
+    class Profile(graphene.ObjectType):
+        school = graphene.String()
+        colleges = graphene.List(graphene.String)
+
+    _id = graphene.String(name='_id',
+                          required=True)  # graphene automatically camcelcases everything so this is to override it
+    email = graphene.String(required=True)
+    password = graphene.String(required=True)
+    firstName = graphene.String(required=True)
+    lastName = graphene.String(required=True)
+    profile = graphene.Field(Profile)
 
 
-class UserType(graphene.InputObjectType):
+class UserInputType(graphene.InputObjectType):
     email = graphene.String(required=True)
     password = graphene.String(required=True)
     firstName = graphene.String(required=True)
@@ -25,7 +31,7 @@ class UserType(graphene.InputObjectType):
 
 class CreateUser(graphene.Mutation):
     class Arguments:
-        userData = UserType(required=True)
+        userData = UserInputType(required=True)
 
     success = graphene.String()
     message = graphene.String()
@@ -58,21 +64,24 @@ class LoginUser(graphene.Mutation):
             return LoginUser(accessToken=accessToken, user=User(**userData))
         return LoginUser(accessToken=None, user=None)
 
-class Query(graphene.ObjectType):
-    getAllUsers = graphene.List(User)
-    getUserById = graphene.Field(lambda: User, _id=graphene.String(required=True))
 
-    def resolve_getAllUsers(self, info):
+class Query(graphene.ObjectType):
+    users = graphene.List(lambda: User)
+    user = graphene.Field(User, _id=graphene.String(name='_id', required=True))
+
+    @jwt_required()
+    def resolve_users(self, info):
         usersCollection = db["users"]
-        print(list(usersCollection.find()))
         return list(usersCollection.find())
 
-    def resolve_getUserById(self, info, _id):
+    @jwt_required()
+    def resolve_user(self, info, _id):
         usersCollection = db["users"]
-        user_data = usersCollection.find_one({"_id": ObjectId(_id)})
-        if user_data:
-            return User(**user_data)
+        userData = usersCollection.find_one({"_id": ObjectId(_id)})
+        if userData:
+            return User(**userData)
         return None
+
 
 class Mutation(graphene.ObjectType):
     createUser = CreateUser.Field()

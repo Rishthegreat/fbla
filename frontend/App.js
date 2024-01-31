@@ -1,20 +1,41 @@
 /* eslint-disable */
 
-import {Login, Signup, MainScreen, AppSettings} from './src/screens';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {Login, Signup, MainScreen} from './src/screens';
+import {StyleSheet, Text, View} from 'react-native';
 import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {AuthProvider} from "./src/contexes/auth-context";
-import {ApolloClient, InMemoryCache, ApolloProvider, useLazyQuery} from '@apollo/client';
+import {ApolloClient, InMemoryCache, ApolloProvider, createHttpLink} from '@apollo/client';
 import {backendLink} from "./GlobalConsts";
 import {AlertProvider} from "./src/contexes/AlertContext";
 import {AlertPopup} from "./src/components";
+import {setContext} from "@apollo/client/link/context";
+import {MMKV} from "react-native-mmkv";
+import {useAlert} from "./src/hooks/useAlert";
+import {useEffect, useState} from "react";
 
+const storage = new MMKV()
 const Stack = createNativeStackNavigator()
+const httpLink = createHttpLink({
+    uri: backendLink
+})
+const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    //const {userToken} = useContext(AuthContext)
+    // return the headers to the context so httpLink can read them
+    console.log(storage.getString('userToken'))
+    return {
+        headers: {
+            ...headers,
+            authorization: storage.contains('userToken') ? `Bearer ${storage.getString('userToken')}` : "",
+        }
+    }
+})
 const client = new ApolloClient({
-    uri: backendLink,
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache()
-});
+})
+
 export const App = () => {
     return (
         <AlertProvider>
