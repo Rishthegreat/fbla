@@ -16,7 +16,7 @@ export const Profile = ({navigation}) => {
             profileQuery({variables: {_id}, onCompleted: r => {
                     setProfile(r.user.profile)
                 }})
-        }, [])
+        }, [setCurrentTab, profileQuery, _id])
     )
     return (
         <View>
