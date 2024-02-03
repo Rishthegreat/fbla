@@ -1,79 +1,99 @@
 /* eslint-disable */
-import {View, Text} from "react-native";
+import {View, Text, TouchableOpacity} from "react-native";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {AuthContext} from "../contexes/auth-context";
 import {useFocusEffect} from "@react-navigation/native";
 import {useLazyQuery, useQuery} from "@apollo/client";
 import {WHOLE_USER_BY_ID} from "../graphql";
+import {AddProfileSection, CustomButton} from "../components";
+import {profile} from "@apollo/client/testing/internal";
 
 export const Profile = ({navigation, route}) => {
     const {setCurrentTab, _id} = useContext(AuthContext)
     const [profileUser, setProfileUser] = useState(null)
+    // This profile.js will be rendered for all profiles including your own, and it will automatically switch between the user view and non-user view depending on if the profile's id matches the current logged-in user's id
     const profileId = route.params?.profileId
-    const [editMode, setEditMode] = useState(profileId === _id)
-    const {loading, data, error} = useQuery(WHOLE_USER_BY_ID, {variables: {_id: profileId}, onCompleted: r => {
-        setProfileUser(r.user)
-        }, pollInterval: 30000})
-    useFocusEffect ( // Run each time the tab is loaded
+    const [selfProfile, setSelfProfile] = useState(profileId === _id)
+    const [newProfile, setNewProfile] = useState(true)
+    const [addSection, setAddSection] = useState(false)
+    const {refetch} = useQuery(WHOLE_USER_BY_ID, {
+        variables: {_id: profileId}, onCompleted: r => {
+            setProfileUser(r.user)
+            //console.log(r.user)
+            if (r.user.profile) {
+                setNewProfile(false)
+            } else {
+                setNewProfile(true)
+            }
+        }, pollInterval: 5000
+    })
+    useFocusEffect( // Run each time the tab is loaded
         useCallback(() => {
-            if (editMode) {
+            refetch().then((r) => console.log(r))
+            if (selfProfile) {
                 setCurrentTab('Profile')
             }
-        }, [setCurrentTab, editMode])
+        }, [setCurrentTab, selfProfile, refetch])
     )
-
     return (
         <View>
-            {profileUser ? Object.keys(profileUser).map(key => {
-                return (
-                    <View key={key}>
-                        <Text>{key}: {profileUser[key]}</Text>
+            {profileUser &&
+                <View>
+                    <View>{/* User Information */}
+                        <View></View>{/* Picture */}
+                        <Text>{profileUser.firstName} {profileUser.lastName}</Text>
+                        {profileUser.profile?.school && <Text>Student at {profileUser.profile.school.name}</Text>}
+                        <Text>Contact: {profileUser.email}</Text>
+                        {selfProfile &&
+                            <View>
+                                <CustomButton text={'Add Section'} onPress={() => setAddSection(true)}/>
+                            </View>
+                        }
                     </View>
-                )
-            }) : null}
-            <View>{/* User Information */}
-                <View>{/* Name */}
+                    {newProfile && selfProfile &&
+                        <View>{/* Prompt to set up the new profile */}
+                            <Text>Finish setting up your profile by adding more sections</Text>
+                        </View>
+                    }
+                    {profileUser.classes &&
+                        <View>{/* Classes taken in school */}
 
-                </View>
-                <View>{/* Email */}
+                        </View>
+                    }
+                    {profileUser.profile?.clubs &&
+                        <View>{/* Clubs */}
 
-                </View>
-                <View>{/* School */}
+                        </View>
+                    }
 
-                </View>
-                <View>{/* Colleges I'm Thinking About */}
+                    {profileUser.profile?.jobsInternships &&
+                        <View>{/* Jobs and Internships */}
 
-                </View>
-            </View>
-            <View>
-                <View>{/* Classes */}
+                        </View>
+                    }
 
-                </View>
-                <View>{/* Test Scores */}
+                    {profileUser.profile?.communityServices &&
+                        <View>{/* Community Service */}
 
-                </View>
-                <View>{/* Clubs */}
+                        </View>
+                    }
 
-                </View>
-                <View>{/* Extra curriculars */}
+                    {profileUser.profile?.awards &&
+                        <View>{/* Awards */}
 
-                </View>
-                <View>{/* Jobs/Internships */}
+                        </View>
+                    }
 
-                </View>
-                <View>{/* Performing Arts Experience */}
+                    {profileUser.profile?.activities &&
+                        <View>{/* activities */}
 
+                        </View>
+                    }
+                    {addSection &&
+                        <AddProfileSection setAddSection={setAddSection} profileUser={profileUser}/>
+                    }
                 </View>
-                <View>{/* Community Service */}
-
-                </View>
-                <View>{/* Skills */}
-
-                </View>
-                <View>{/* Awards */}
-
-                </View>
-            </View>
+            }
         </View>
     )
 }

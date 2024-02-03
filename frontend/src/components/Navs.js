@@ -33,7 +33,7 @@ export const BottomNav = ({navigation}) => {
             <View style={styles.bottom_nav_container}>
                 {bottomBarList.map((value, key) => {
                     return (
-                        <TouchableOpacity key={key} style={{...styles.tab_container, backgroundColor: currentTab === value.navigateTo ? '#b4b3b3' : 'white'}} onPress={() => navigation.navigate(value.navigateTo, {profileId: _id})}>
+                        <TouchableOpacity key={key} style={{...styles.tab_container, backgroundColor: currentTab === value.navigateTo ? '#b4b3b3' : 'white'}} onPress={() => navigation.navigate(value.navigateTo, value.navigateTo === 'Profile'? {profileId: _id} : null)}>
                             <IconWithText text={value.text} icon={value.icon} textColor={designChoices.almostBlack} />
                         </TouchableOpacity>
                     )
