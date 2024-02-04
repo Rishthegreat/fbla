@@ -29,3 +29,12 @@ export const LOGIN_USER = gql`
         }
     }
 `
+
+export const UPDATE_PROFILE = gql`
+    mutation UpdateProfile($_id: String!, $section: String!, $changes: JSONString!) {
+        updateProfile(_id: $_id, section: $section, changes: $changes) {
+            success
+            message
+        }
+    }
+`

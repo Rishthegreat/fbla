@@ -11,6 +11,8 @@ export const CustomButton = ({text, onPress, style}) => {
     )
 }
 
+
+
 const styles = StyleSheet.create({
     container: {
         backgroundColor: designChoices.primary,

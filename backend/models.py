@@ -110,6 +110,22 @@ class LoginUser(graphene.Mutation):
         return LoginUser(accessToken=None, user=None)
 
 
+class UpdateProfile(graphene.Mutation):
+    success = graphene.Boolean()
+    message = graphene.String()
+    class Arguments:
+        _id = graphene.String(required=True, name='_id')
+        section = graphene.String(required=True)
+        changes = graphene.JSONString(required=True)
+
+    def mutate(self, info, _id, section, changes):
+        print(_id)
+        print(section)
+        print(changes)
+        usersCollection = db["users"]
+        usersCollection.update_one({"_id": ObjectId(_id)}, {"$set": {"profile.school": {"name": "newname", "newfiled": "dfdfdf"}}})
+        return UpdateProfile(success=True, message=None)
+
 class Query(graphene.ObjectType):
     users = graphene.List(User)
     user = graphene.Field(User, _id=graphene.String(name='_id', required=True))
@@ -131,6 +147,7 @@ class Query(graphene.ObjectType):
 class Mutation(graphene.ObjectType):
     createUser = CreateUser.Field()
     loginUser = LoginUser.Field()
+    updateProfile = UpdateProfile.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)

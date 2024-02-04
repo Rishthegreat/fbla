@@ -51,7 +51,7 @@ export const MainScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
     root: {
-        marginHorizontal: 20,
+        padding: 20,
         height: '100%'
     },
     bottom_nav_container: {

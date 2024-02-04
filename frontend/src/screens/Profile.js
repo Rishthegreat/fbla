@@ -6,7 +6,6 @@ import {useFocusEffect} from "@react-navigation/native";
 import {useLazyQuery, useQuery} from "@apollo/client";
 import {WHOLE_USER_BY_ID} from "../graphql";
 import {AddProfileSection, CustomButton} from "../components";
-import {profile} from "@apollo/client/testing/internal";
 
 export const Profile = ({navigation, route}) => {
     const {setCurrentTab, _id} = useContext(AuthContext)
