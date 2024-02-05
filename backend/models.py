@@ -1,3 +1,6 @@
+import json
+
+import bson.objectid
 import graphene
 from pymongo import MongoClient
 from bcrypt import hashpw, gensalt
@@ -15,38 +18,46 @@ class User(graphene.ObjectType):
 
         class College(graphene.ObjectType):
             name = graphene.String()
+            _id = graphene.String(name='_id')
 
         class _Class(graphene.ObjectType):
             name = graphene.String()
+            _id = graphene.String(name='_id')
 
         class Test(graphene.ObjectType):
             name = graphene.String()
             score = graphene.Int()
+            _id = graphene.String(name='_id')
 
         class Club(graphene.ObjectType):
             name = graphene.String()
             position = graphene.String()
             description = graphene.String()
+            _id = graphene.String(name='_id')
 
         class JobInternship(graphene.ObjectType):
             position = graphene.String()
             company = graphene.String()
             description = graphene.String()
+            _id = graphene.String(name='_id')
 
         class CommunityService(graphene.ObjectType):
             position = graphene.String()
             organization = graphene.String()
             hours = graphene.Float()
             description = graphene.String()
+            _id = graphene.String(name='_id')
 
         class Award(graphene.ObjectType):
             name = graphene.String()
             organization = graphene.String()
             description = graphene.String()
+            _id = graphene.String(name='_id')
 
         class Activity(graphene.ObjectType):
             name = graphene.String()
             description = graphene.String()
+            activityId = graphene.String()
 
         school = graphene.Field(School)
         colleges = graphene.List(College)
@@ -85,6 +96,7 @@ class CreateUser(graphene.Mutation):
         userData['password'] = hashed_password.decode('utf-8')
         usersCollection = db["users"]
         if usersCollection.count_documents({"email": userData['email']}, limit=1) == 0:
+            #userData['_id'] = bson.objectid.ObjectId()
             newUser = User(**userData)
             usersCollection.insert_one(userData)
             return CreateUser(success=True, message=None)
@@ -113,18 +125,32 @@ class LoginUser(graphene.Mutation):
 class UpdateProfile(graphene.Mutation):
     success = graphene.Boolean()
     message = graphene.String()
+
     class Arguments:
         _id = graphene.String(required=True, name='_id')
         section = graphene.String(required=True)
         changes = graphene.JSONString(required=True)
+        subsectionId = graphene.String()
 
-    def mutate(self, info, _id, section, changes):
+    def mutate(self, info, _id, section, changes, subsectionId):
         print(_id)
         print(section)
         print(changes)
+        print(subsectionId)
         usersCollection = db["users"]
-        usersCollection.update_one({"_id": ObjectId(_id)}, {"$set": {"profile.school": {"name": "newname", "newfiled": "dfdfdf"}}})
+        if subsectionId != "null":
+            newChanges = {}
+            for key, value in changes.items():
+                newChanges[f'profile.{section}.$.{key}'] = value
+            usersCollection.update_one({"_id": ObjectId(_id), f'profile.{section}._id': ObjectId(subsectionId)}, {"$set": newChanges})
+        else:
+            if (section == 'school'):
+                usersCollection.update_one({"_id": ObjectId(_id)}, {"$set": {f'profile.{section}': changes}})
+            else:
+                changes['_id'] = bson.objectid.ObjectId()
+                usersCollection.update_one({"_id": ObjectId(_id)}, {"$push": {f'profile.{section}': changes}})
         return UpdateProfile(success=True, message=None)
+
 
 class Query(graphene.ObjectType):
     users = graphene.List(User)
