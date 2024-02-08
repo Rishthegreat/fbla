@@ -52,7 +52,7 @@ export const Profile = ({navigation, route}) => {
                         }
                     </View>
                     {newProfile && selfProfile &&
-                        <View>{/* Prompt to set up the new profile */}
+                        <View>{/* Prompt to set up new profile */}
                             <Text>Finish setting up your profile by adding more sections</Text>
                         </View>
                     }
