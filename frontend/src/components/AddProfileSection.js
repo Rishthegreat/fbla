@@ -68,7 +68,8 @@ export const AddProfileSection = ({profileUser, setAddSection}) => {
     }
     const submitAddSection = () => {
         console.log(JSON.stringify(questionAnswers))
-        updateProfileMutation({variables: {_id: _id, section:profileSectionType.key, changes: JSON.stringify(questionAnswers)}})
+        updateProfileMutation({variables: {_id: _id, section:profileSectionType.key, changes: JSON.stringify(questionAnswers), subsectionId: 'null'}, onError: (e) => console.log(JSON.stringify(e, null, 2))})
+        // Need to change the query a bit
     }
     return (
         <Modal animationType={'fade'} transparent={true}>

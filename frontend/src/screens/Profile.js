@@ -1,11 +1,12 @@
 /* eslint-disable */
-import {View, Text, TouchableOpacity} from "react-native";
+import {View, Text, TouchableOpacity, StyleSheet} from "react-native";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {AuthContext} from "../contexes/auth-context";
 import {useFocusEffect} from "@react-navigation/native";
 import {useLazyQuery, useQuery} from "@apollo/client";
 import {WHOLE_USER_BY_ID} from "../graphql";
 import {AddProfileSection, CustomButton} from "../components";
+import {designChoices} from "../../GlobalConsts";
 
 export const Profile = ({navigation, route}) => {
     const {setCurrentTab, _id} = useContext(AuthContext)
@@ -15,25 +16,26 @@ export const Profile = ({navigation, route}) => {
     const [selfProfile, setSelfProfile] = useState(profileId === _id)
     const [newProfile, setNewProfile] = useState(true)
     const [addSection, setAddSection] = useState(false)
-    const {refetch} = useQuery(WHOLE_USER_BY_ID, {
-        variables: {_id: profileId}, onCompleted: r => {
-            setProfileUser(r.user)
-            //console.log(r.user)
-            if (r.user.profile) {
+    const {data, error, loading} = useQuery(WHOLE_USER_BY_ID, {
+        variables: {_id: profileId}, pollInterval: 3000
+    })
+    useFocusEffect( // Run each time the tab is loaded
+        useCallback(() => {
+            if (selfProfile) {
+                setCurrentTab('Profile')
+            }
+        }, [setCurrentTab, selfProfile])
+    )
+    useEffect(() => {
+        if (!error && !loading) {
+            setProfileUser(data.user)
+            if (data.user.profile) {
                 setNewProfile(false)
             } else {
                 setNewProfile(true)
             }
-        }, pollInterval: 5000
-    })
-    useFocusEffect( // Run each time the tab is loaded
-        useCallback(() => {
-            refetch().then((r) => console.log(r))
-            if (selfProfile) {
-                setCurrentTab('Profile')
-            }
-        }, [setCurrentTab, selfProfile, refetch])
-    )
+        }
+    }, [data, error, loading]);
     return (
         <View>
             {profileUser &&
@@ -54,9 +56,23 @@ export const Profile = ({navigation, route}) => {
                             <Text>Finish setting up your profile by adding more sections</Text>
                         </View>
                     }
-                    {profileUser.classes &&
+                    {profileUser.profile?.classes &&
                         <View>{/* Classes taken in school */}
 
+                        </View>
+                    }
+                    {profileUser.profile?.colleges &&
+                        <View style={styles.sectionContainer}>{/* colleges I am interested in */}
+                            <Text>Colleges I am Interested in</Text>
+                            {
+                                profileUser.profile.colleges.map(value => {
+                                    return (
+                                        <View>
+                                            <Text>{value.name}</Text>
+                                        </View>
+                                    )
+                                })
+                            }
                         </View>
                     }
                     {profileUser.profile?.clubs &&
@@ -96,3 +112,11 @@ export const Profile = ({navigation, route}) => {
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    sectionContainer: {
+        backgroundColor: designChoices.secondary,
+        borderRadius: 3,
+        padding: 10
+    }
+})

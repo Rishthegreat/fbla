@@ -7,45 +7,53 @@ export const WHOLE_USER_BY_ID = gql`
             lastName
             email
             profile {
-                school {
-                    name
-                }
-                colleges {
-                    name
-                }
-                classes {
-                    name
-                }
-                tests {
-                    name
-                    score
-                }
-                clubs {
-                    name
-                    position
-                    description
-                }
-                jobsInternships {
-                    position
-                    company
-                    description
-                }
-                communityServices {
-                    position
-                    organization
-                    hours
-                    description
-                }
-                awards {
-                    name
-                    organization
-                    description
-                }
-                activities {
-                    name
-                    description
-                }
+            school {
+                name
             }
+            colleges {
+                name
+                _id
+            }
+            classes {
+                name
+                _id
+            }
+            tests {
+                name
+                score
+                _id
+            }
+            clubs {
+                name
+                position
+                description
+                _id
+            }
+            jobsInternships {
+                position
+                company
+                description
+                _id
+            }
+            communityServices {
+                position
+                organization
+                hours
+                description
+                _id
+            }
+            awards {
+                name
+                organization
+                description
+                _id
+            }
+            activities {
+                name
+                description
+                activityId
+            }
+        }
         }
     }
 `
