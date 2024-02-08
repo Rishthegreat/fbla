@@ -7,6 +7,7 @@ import {useLazyQuery, useQuery} from "@apollo/client";
 import {WHOLE_USER_BY_ID} from "../graphql";
 import {AddProfileSection, CustomButton} from "../components";
 import {designChoices} from "../../GlobalConsts";
+import Icon from "react-native-vector-icons/AntDesign";
 
 export const Profile = ({navigation, route}) => {
     const {setCurrentTab, _id} = useContext(AuthContext)
@@ -47,7 +48,7 @@ export const Profile = ({navigation, route}) => {
                         <Text>Contact: {profileUser.email}</Text>
                         {selfProfile &&
                             <View>
-                                <CustomButton text={'Add Section'} onPress={() => setAddSection(true)}/>
+                                <CustomButton text={'Add Information to Section'} onPress={() => setAddSection(true)}/>
                             </View>
                         }
                     </View>
@@ -72,6 +73,11 @@ export const Profile = ({navigation, route}) => {
                                         </View>
                                     )
                                 })
+                            }
+                            {selfProfile &&
+                                <TouchableOpacity style={styles.editIcon}>
+                                    <Icon name='edit' size={20} />
+                                </TouchableOpacity>
                             }
                         </View>
                     }
@@ -115,8 +121,14 @@ export const Profile = ({navigation, route}) => {
 
 const styles = StyleSheet.create({
     sectionContainer: {
-        backgroundColor: designChoices.secondary,
+        backgroundColor: designChoices.offWhite,
         borderRadius: 3,
-        padding: 10
+        padding: 10,
+        position: "relative"
+    },
+    editIcon: {
+        position: "absolute",
+        top: 10,
+        right: 10
     }
 })

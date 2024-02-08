@@ -1,5 +1,5 @@
 /* eslint-disable */
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView} from 'react-native';
 import {useContext} from "react";
 import {AuthContext} from "../contexes/auth-context";
 import {AppSettings} from "./AppSettings";

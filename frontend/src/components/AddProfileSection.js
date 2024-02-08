@@ -1,27 +1,14 @@
 /* eslint-disable */
 
-import {View, Text, TouchableOpacity, Modal, StyleSheet, Pressable} from "react-native";
-import React, {useCallback, useContext, useEffect, useState} from "react";
-import {CustomButton} from "./CustomButton";
+import {View, Text, TouchableOpacity, Modal, StyleSheet, KeyboardAvoidingView, Keyboard} from "react-native";
+import React, {useCallback, useContext, useState} from "react";
 import {useFocusEffect} from "@react-navigation/native";
-import {CustomDropdown} from "./CustomDropdown";
-import {CustomInput} from "./CustomInput";
+import {CustomDropdown, CustomInput, CustomButton} from "../components";
 import Icon from "react-native-vector-icons/AntDesign";
 import {designChoices} from "../../GlobalConsts";
 import {useMutation} from "@apollo/client";
 import {UPDATE_PROFILE} from "../graphql";
 import {AuthContext} from "../contexes/auth-context";
-
-
-const FurtherQuestions = () => {
-    const [value, setValue] = useState('')
-    return (
-        <View>
-            <Text></Text>
-            <CustomInput value={value} setValue={setValue} />
-        </View>
-    )
-}
 
 export const AddProfileSection = ({profileUser, setAddSection}) => {
     const [profileSectionsLeft, setProfileSectionsLeft] = useState([])
@@ -56,12 +43,16 @@ export const AddProfileSection = ({profileUser, setAddSection}) => {
         console.log(item)
         setProfileSectionType(item)
         let questions = profileSectionsSchema?.[item.key].items.map(value => { //Need to add functionality to make the textboxes expand as text gets longer
+            let prompt = value.toLocaleString()
             return (
-                <CustomInput placeholder={value} setValue={(updatedText) => {
-                    setQuestionAnswers(p => {
-                        return {...p, [value]: updatedText}
-                    })
-                }} />
+                <View>
+                    <Text>{prompt[0].toLocaleUpperCase()+prompt.slice(1, prompt.length)}</Text>
+                    <CustomInput expandable={true} placeholder={value} setValue={(updatedText) => {
+                        setQuestionAnswers(p => {
+                            return {...p, [value]: updatedText}
+                        })
+                    }} />
+                </View>
             )
         })
         setAdditionalQuestions(questions)
@@ -78,11 +69,12 @@ export const AddProfileSection = ({profileUser, setAddSection}) => {
                     <TouchableOpacity style={styles.closeContainer} onPress={() => setAddSection(false)}>
                         <Icon name={'close'} size={20} color={designChoices.almostBlack} />
                     </TouchableOpacity>
-                    <Text style={styles.questionText}>Choose which section to add</Text>
+                    <Text style={{...styles.questionText, color: designChoices.error}}>If the section chosen has no information, it will be added to your profile</Text>
+                    <Text style={styles.questionText}>Choose which section to add information to</Text>
                     <CustomDropdown placeholder='Select Item...' data={profileSectionsLeft} value={profileSectionType?.value} onChange={onSelectItem} />
-                    <View>{additionalQuestions}</View>{/* Dynamically updating inputs */}
+                    <View style={{marginVertical: 15}}>{additionalQuestions}</View>{/* Dynamically updating inputs */}
                     {additionalQuestions &&
-                        <CustomButton text={'Add Section'} onPress={submitAddSection} />
+                        <CustomButton text={'Add'} onPress={submitAddSection} />
                     }
                 </View>
             </View>
@@ -97,14 +89,16 @@ const styles = StyleSheet.create({
         height: '100%',
         display: "flex",
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        position: "relative",
     },
     container: {
-        width: '90%',
-        height: '90%',
         padding: 25,
         backgroundColor: 'rgb(239,239,239)',
-        borderRadius: 3
+        borderRadius: 3,
+        overflowY: "scroll",
+        minHeight: '90%',
+        width: '90%'
     },
     closeContainer: {
         width: 20,
@@ -113,6 +107,7 @@ const styles = StyleSheet.create({
         right: 10
     },
     questionText: {
-        fontSize: 17
+        fontSize: 17,
+        marginVertical: 4
     }
 })
