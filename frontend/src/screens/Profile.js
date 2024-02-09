@@ -3,11 +3,24 @@ import {View, Text, TouchableOpacity, StyleSheet} from "react-native";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {AuthContext} from "../contexes/auth-context";
 import {useFocusEffect} from "@react-navigation/native";
-import {useLazyQuery, useQuery} from "@apollo/client";
+import {useQuery} from "@apollo/client";
 import {WHOLE_USER_BY_ID} from "../graphql";
-import {AddProfileSection, CustomButton} from "../components";
+import {AddProfileSection, CustomButton, ProfileEditSectionView} from "../components";
 import {designChoices} from "../../GlobalConsts";
 import Icon from "react-native-vector-icons/AntDesign";
+
+const ProfileView = ({children, selfProfile, sectionType, setEditSectionType}) => {
+    return (
+        <View style={styles.sectionContainer}>
+            {children}
+            {selfProfile &&
+                <TouchableOpacity style={styles.editIcon} onPress={() => setEditSectionType(sectionType)}>
+                    <Icon name='edit' size={20} />
+                </TouchableOpacity>
+            }
+        </View>
+    )
+}
 
 export const Profile = ({navigation, route}) => {
     const {setCurrentTab, _id} = useContext(AuthContext)
@@ -17,8 +30,9 @@ export const Profile = ({navigation, route}) => {
     const [selfProfile, setSelfProfile] = useState(profileId === _id)
     const [newProfile, setNewProfile] = useState(true)
     const [addSection, setAddSection] = useState(false)
-    const {data, error, loading} = useQuery(WHOLE_USER_BY_ID, {
-        variables: {_id: profileId}, pollInterval: 3000
+    const [editSectionType, setEditSectionType] = useState(null)
+    const {data, error, loading, refetch} = useQuery(WHOLE_USER_BY_ID, {
+        variables: {_id: profileId}, pollInterval: 10000
     })
     useFocusEffect( // Run each time the tab is loaded
         useCallback(() => {
@@ -58,13 +72,22 @@ export const Profile = ({navigation, route}) => {
                         </View>
                     }
                     {profileUser.profile?.classes &&
-                        <View>{/* Classes taken in school */}
-
-                        </View>
+                        <ProfileView selfProfile={selfProfile} sectionType='classes' setEditSectionType={setEditSectionType}>{/* Classes taken in school */}
+                            <Text style={styles.sectionHeader}>Classes I am Currently Taking</Text>
+                            {
+                                profileUser.profile.classes.map(value => {
+                                    return (
+                                        <View>
+                                            <Text>{value.name}</Text>
+                                        </View>
+                                    )
+                                })
+                            }
+                        </ProfileView>
                     }
                     {profileUser.profile?.colleges &&
-                        <View style={styles.sectionContainer}>{/* colleges I am interested in */}
-                            <Text>Colleges I am Interested in</Text>
+                        <ProfileView selfProfile={selfProfile} sectionType='colleges' setEditSectionType={setEditSectionType}>{/* colleges I am interested in */}
+                            <Text style={styles.sectionHeader}>Colleges I am Interested in</Text>
                             {
                                 profileUser.profile.colleges.map(value => {
                                     return (
@@ -74,44 +97,58 @@ export const Profile = ({navigation, route}) => {
                                     )
                                 })
                             }
-                            {selfProfile &&
-                                <TouchableOpacity style={styles.editIcon}>
-                                    <Icon name='edit' size={20} />
-                                </TouchableOpacity>
-                            }
-                        </View>
+                        </ProfileView>
                     }
                     {profileUser.profile?.clubs &&
-                        <View>{/* Clubs */}
+                        <ProfileView selfProfile={selfProfile} setEditSectionType={setEditSectionType}>
 
-                        </View>
+                        </ProfileView>
                     }
 
                     {profileUser.profile?.jobsInternships &&
-                        <View>{/* Jobs and Internships */}
+                        <ProfileView selfProfile={selfProfile} setEditSectionType={setEditSectionType}>
 
-                        </View>
+                        </ProfileView>
                     }
 
                     {profileUser.profile?.communityServices &&
-                        <View>{/* Community Service */}
+                        <ProfileView selfProfile={selfProfile} setEditSectionType={setEditSectionType}>
 
-                        </View>
+                        </ProfileView>
                     }
 
                     {profileUser.profile?.awards &&
-                        <View>{/* Awards */}
+                        <ProfileView selfProfile={selfProfile} setEditSectionType={setEditSectionType}>
 
-                        </View>
+                        </ProfileView>
+                    }
+
+                    {profileUser.profile?.tests &&
+                        <ProfileView selfProfile={selfProfile} sectionType='tests' setEditSectionType={setEditSectionType}>
+                            <Text style={styles.sectionHeader}>Tests I have Taken</Text>
+                            {
+                                profileUser.profile.tests.map(value => {
+                                    return (
+                                        <View>
+                                            <Text>{value.name}</Text>
+                                            <Text>{value.score}</Text>
+                                        </View>
+                                    )
+                                })
+                            }
+                        </ProfileView>
                     }
 
                     {profileUser.profile?.activities &&
-                        <View>{/* activities */}
+                        <ProfileView selfProfile={selfProfile} setEditSectionType={setEditSectionType}>
 
-                        </View>
+                        </ProfileView>
                     }
                     {addSection &&
-                        <AddProfileSection setAddSection={setAddSection} profileUser={profileUser}/>
+                        <AddProfileSection refetch={refetch} setAddSection={setAddSection} profileUser={profileUser}/>
+                    }
+                    {editSectionType &&
+                        <ProfileEditSectionView refetch={refetch} editSectionType={editSectionType} setEditSectionType={setEditSectionType} profileUser={profileUser} />
                     }
                 </View>
             }
@@ -124,7 +161,12 @@ const styles = StyleSheet.create({
         backgroundColor: designChoices.offWhite,
         borderRadius: 3,
         padding: 10,
-        position: "relative"
+        position: "relative",
+        marginVertical: 5
+    },
+    sectionHeader: {
+        fontSize: 17,
+        fontWeight: "bold"
     },
     editIcon: {
         position: "absolute",

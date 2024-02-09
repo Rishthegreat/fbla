@@ -9,13 +9,15 @@ import {designChoices} from "../../GlobalConsts";
 import {useMutation} from "@apollo/client";
 import {UPDATE_PROFILE} from "../graphql";
 import {AuthContext} from "../contexes/auth-context";
+import {AlertContext} from "../contexes/AlertContext";
 
-export const AddProfileSection = ({profileUser, setAddSection}) => {
+export const AddProfileSection = ({profileUser, setAddSection, refetch}) => {
     const [profileSectionsLeft, setProfileSectionsLeft] = useState([])
     const [profileSectionType, setProfileSectionType] = useState(null)
     const [additionalQuestions, setAdditionalQuestions] = useState(null)
     const [questionAnswers, setQuestionAnswers] = useState({})
     const [updateProfileMutation] = useMutation(UPDATE_PROFILE)
+    const {setAlert} = useContext(AlertContext)
     const {_id} = useContext(AuthContext)
     const profileSectionsSchema = { // remember to change this if backend is changed
         school: {items:['name'], label:'Current School'},
@@ -60,7 +62,11 @@ export const AddProfileSection = ({profileUser, setAddSection}) => {
     const submitAddSection = () => {
         console.log(JSON.stringify(questionAnswers))
         updateProfileMutation({variables: {_id: _id, section:profileSectionType.key, changes: JSON.stringify(questionAnswers), subsectionId: 'null'}, onError: (e) => console.log(JSON.stringify(e, null, 2))})
-        // Need to change the query a bit
+            .then(() => {
+                refetch()
+                setAddSection(false)
+                setAlert('Added Successfully!', 'success')
+            })
     }
     return (
         <Modal animationType={'fade'} transparent={true}>
