@@ -26,7 +26,7 @@ class User(graphene.ObjectType):
 
         class Test(graphene.ObjectType):
             name = graphene.String()
-            score = graphene.Int()
+            score = graphene.String()
             _id = graphene.String(name='_id')
 
         class Club(graphene.ObjectType):
@@ -133,10 +133,6 @@ class UpdateProfile(graphene.Mutation):
         subsectionId = graphene.String()
 
     def mutate(self, info, _id, section, changes, subsectionId):
-        print(_id)
-        print(section)
-        print(changes)
-        print(subsectionId)
         usersCollection = db["users"]
         if subsectionId != "null":
             newChanges = {}
@@ -151,6 +147,21 @@ class UpdateProfile(graphene.Mutation):
                 usersCollection.update_one({"_id": ObjectId(_id)}, {"$push": {f'profile.{section}': changes}})
         return UpdateProfile(success=True, message=None)
 
+
+class DeleteSection(graphene.Mutation):
+    success = graphene.Boolean()
+    message = graphene.String()
+    class Arguments:
+        _id = graphene.String(name='_id', required=True)
+        section = graphene.String(required=True)
+        subsectionId = graphene.String()
+    def mutate(self, info, _id, section, subsectionId):
+        usersCollection = db["users"]
+        if subsectionId != 'null':
+            usersCollection.update_one({"_id": ObjectId(_id)}, {"$pull": {f'profile.{section}': {"_id": ObjectId(subsectionId)}}})
+        else:
+            usersCollection.update_one({"_id": ObjectId(_id)}, {"$unset": {f'profile.{section}': None}})
+        return DeleteSection(success=True, message=None)
 
 class Query(graphene.ObjectType):
     users = graphene.List(User)
@@ -174,6 +185,7 @@ class Mutation(graphene.ObjectType):
     createUser = CreateUser.Field()
     loginUser = LoginUser.Field()
     updateProfile = UpdateProfile.Field()
+    deleteSection = DeleteSection.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)

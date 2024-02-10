@@ -26,7 +26,7 @@ const TabsStack = createNativeStackNavigator()
 const MainApp = ({navigation}) => {
     const {userToken, login, logout} = useContext(AuthContext)
     return (
-        <View>
+        <View style={styles.bigContainer}>
             <View style={styles.root}>
                 <TabsStack.Navigator initialRouteName='Homepage'>
                     <TabsStack.Screen name='Homepage' options={{headerShown: false}} component={Homepage}/>
@@ -50,13 +50,15 @@ export const MainScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-    root: {
-        padding: 20,
+    bigContainer: {
+        display: "flex",
         height: '100%'
     },
+    root: {
+        flexGrow: 1,
+        paddingHorizontal: 20
+    },
     bottom_nav_container: {
-        position: "absolute",
-        bottom: 0,
         width: '100%',
     }
 })

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import {View, Text, TouchableOpacity, StyleSheet} from "react-native";
+import {View, Text, TouchableOpacity, StyleSheet, ScrollView} from "react-native";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {AuthContext} from "../contexes/auth-context";
 import {useFocusEffect} from "@react-navigation/native";
@@ -52,10 +52,10 @@ export const Profile = ({navigation, route}) => {
         }
     }, [data, error, loading]);
     return (
-        <View>
+        <ScrollView showsVerticalScrollIndicator={false}>
             {profileUser &&
                 <View>
-                    <View>{/* User Information */}
+                    <View style={{marginTop: 10}}>{/* User Information */}
                         <View></View>{/* Picture */}
                         <Text>{profileUser.firstName} {profileUser.lastName}</Text>
                         {profileUser.profile?.school && <Text>Student at {profileUser.profile.school.name}</Text>}
@@ -100,26 +100,71 @@ export const Profile = ({navigation, route}) => {
                         </ProfileView>
                     }
                     {profileUser.profile?.clubs &&
-                        <ProfileView selfProfile={selfProfile} setEditSectionType={setEditSectionType}>
-
+                        <ProfileView selfProfile={selfProfile} sectionType='clubs' setEditSectionType={setEditSectionType}>
+                            <Text style={styles.sectionHeader}>Clubs I Participate In</Text>
+                            {
+                                profileUser.profile.clubs.map(value => {
+                                    return (
+                                        <View>
+                                            <Text>{value.name}</Text>
+                                            <Text>{value.position}</Text>
+                                            <Text>{value.description}</Text>
+                                        </View>
+                                    )
+                                })
+                            }
                         </ProfileView>
                     }
 
                     {profileUser.profile?.jobsInternships &&
-                        <ProfileView selfProfile={selfProfile} setEditSectionType={setEditSectionType}>
-
+                        <ProfileView selfProfile={selfProfile} sectionType='jobsInternships' setEditSectionType={setEditSectionType}>
+                            <Text style={styles.sectionHeader}>Jobs and Internships</Text>
+                            {
+                                profileUser.profile.jobsInternships.map(value => {
+                                    return (
+                                        <View>
+                                            <Text>{value.position}</Text>
+                                            <Text>{value.company}</Text>
+                                            <Text>{value.description}</Text>
+                                        </View>
+                                    )
+                                })
+                            }
                         </ProfileView>
                     }
 
                     {profileUser.profile?.communityServices &&
-                        <ProfileView selfProfile={selfProfile} setEditSectionType={setEditSectionType}>
-
+                        <ProfileView selfProfile={selfProfile} sectionType='communityServices' setEditSectionType={setEditSectionType}>
+                            <Text style={styles.sectionHeader}>Community Service</Text>
+                            {
+                                profileUser.profile.communityServices.map(value => {
+                                    return (
+                                        <View>
+                                            <Text>{value.position}</Text>
+                                            <Text>{value.organization}</Text>
+                                            <Text>{value.hours}</Text>
+                                            <Text>{value.description}</Text>
+                                        </View>
+                                    )
+                                })
+                            }
                         </ProfileView>
                     }
 
                     {profileUser.profile?.awards &&
-                        <ProfileView selfProfile={selfProfile} setEditSectionType={setEditSectionType}>
-
+                        <ProfileView selfProfile={selfProfile} sectionType='awards' setEditSectionType={setEditSectionType}>
+                            <Text style={styles.sectionHeader}>Awards</Text>
+                            {
+                                profileUser.profile.awards.map(value => {
+                                    return (
+                                        <View>
+                                            <Text>{value.name}</Text>
+                                            <Text>{value.organization}</Text>
+                                            <Text>{value.description}</Text>
+                                        </View>
+                                    )
+                                })
+                            }
                         </ProfileView>
                     }
 
@@ -140,8 +185,18 @@ export const Profile = ({navigation, route}) => {
                     }
 
                     {profileUser.profile?.activities &&
-                        <ProfileView selfProfile={selfProfile} setEditSectionType={setEditSectionType}>
-
+                        <ProfileView selfProfile={selfProfile} sectionType='activities' setEditSectionType={setEditSectionType}>
+                            <Text style={styles.sectionHeader}>Other Activities</Text>
+                            {
+                                profileUser.profile.activities.map(value => {
+                                    return (
+                                        <View>
+                                            <Text>{value.name}</Text>
+                                            <Text>{value.description}</Text>
+                                        </View>
+                                    )
+                                })
+                            }
                         </ProfileView>
                     }
                     {addSection &&
@@ -152,7 +207,7 @@ export const Profile = ({navigation, route}) => {
                     }
                 </View>
             }
-        </View>
+        </ScrollView>
     )
 }
 

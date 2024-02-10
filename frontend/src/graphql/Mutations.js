@@ -38,3 +38,12 @@ export const UPDATE_PROFILE = gql`
         }
     }
 `
+
+export const DELETE_SECTION = gql`
+    mutation DeleteSection($_id: String!, $section: String!, $subsectionId: String!) {
+        deleteSection(_id: $_id, section: $section, subsectionId: $subsectionId) {
+            success
+            message
+        }
+    }
+`

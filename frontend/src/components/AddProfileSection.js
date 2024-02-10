@@ -62,9 +62,10 @@ export const AddProfileSection = ({profileUser, setAddSection, refetch}) => {
     const submitAddSection = () => {
         console.log(JSON.stringify(questionAnswers))
         updateProfileMutation({variables: {_id: _id, section:profileSectionType.key, changes: JSON.stringify(questionAnswers), subsectionId: 'null'}, onError: (e) => console.log(JSON.stringify(e, null, 2))})
-            .then(() => {
+            .then((r) => {
                 refetch()
                 setAddSection(false)
+                console.log(r)
                 setAlert('Added Successfully!', 'success')
             })
     }
