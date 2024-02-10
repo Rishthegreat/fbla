@@ -7,17 +7,19 @@ import {BottomNav, TopNav} from "../components";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {Homepage} from "./Homepage";
 import {Profile} from "./Profile";
+import {CustomButton} from "../components";
 
 const Welcome = ({navigation}) => {
     return (
         <View style={styles.root}>
-            <Text>Welcome to our application</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                <Text>Log In</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-                <Text>Sign Up</Text>
-            </TouchableOpacity>
+            <View style={styles.countContainer}>
+                <Text>Spark Social</Text>
+            </View>
+            <View style={styles.countContainer}>
+                <Text>Change the World</Text>
+            </View>
+            <CustomButton text={'Log In'} onPress={() => navigation.navigate('Login')}/>
+            <CustomButton text={'Sign Up'} onPress={() => navigation.navigate('Signup')}/>
         </View>
     );
 }
@@ -60,5 +62,11 @@ const styles = StyleSheet.create({
     },
     bottom_nav_container: {
         width: '100%',
+        marginTop: "auto"
+    },
+    countContainer: {
+        alignItems: 'center',
+        padding: 10,
+
     }
 })

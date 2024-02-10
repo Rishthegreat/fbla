@@ -19,7 +19,10 @@ export const Homepage = ({navigation}) => {
     return (
         <View>
             <View>
-                <Text>Welcome to the Application, User</Text>
+                <Text>Spark Social</Text>
+            </View>
+            <View>
+                <Text></Text>
             </View>
         </View>
     )
