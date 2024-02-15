@@ -6,6 +6,7 @@ import {CustomButton} from "../components";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import TempLogo from '../../assets/images/Logo.png'
 import {useFocusEffect} from "@react-navigation/native";
+import {designChoices} from "../../GlobalConsts";
 
 const IndividualSetting = ({name}) => {
     return (
@@ -48,7 +49,8 @@ const styles = StyleSheet.create({
     root: {
         alignItems: "center",
         height: '100%',
-        width: '100%'
+        width: '100%',
+        backgroundColor: designChoices.white
     },
     title: {
         fontSize: 20,

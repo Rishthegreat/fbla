@@ -8,6 +8,7 @@ import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {Homepage} from "./Homepage";
 import {Profile} from "./Profile";
 import {CustomButton} from "../components";
+import {designChoices} from "../../GlobalConsts";
 
 const Welcome = ({navigation}) => {
     return (
@@ -58,7 +59,8 @@ const styles = StyleSheet.create({
     },
     root: {
         flexGrow: 1,
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
+        backgroundColor: designChoices.white
     },
     bottom_nav_container: {
         width: '100%',

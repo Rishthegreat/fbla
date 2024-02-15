@@ -58,6 +58,9 @@ export const ProfileEditSectionView = ({profileUser, editSectionType, setEditSec
                 setAlert('Successfully Deleted', 'success')
             })
     }
+    const addItem = () => {
+
+    }
     return (
         <Modal animationType={'fade'} transparent={true}>
             <View style={styles.modal}>
@@ -98,7 +101,7 @@ const styles = StyleSheet.create({
     },
     container: {
         padding: 25,
-        backgroundColor: 'rgb(239,239,239)',
+        backgroundColor: designChoices.white,
         borderRadius: 3,
         overflowY: "scroll",
         minHeight: '90%',

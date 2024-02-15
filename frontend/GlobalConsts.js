@@ -1,14 +1,15 @@
 /* eslint-disable */
 
 export const designChoices = {
-    primary: '#0047AB',
-    secondary: '#5177af',
-    offWhite: '#d1dcec',
-    white: '#f0f0fa',
+    primary: '#f0a53f',
+    secondary: '#35c0c3',
+    tertiary: '#262666',
+    offWhite: '#f3e5d4',
+    white: '#fcfaf7',
     almostGrey: '#00214d',
-    almostBlack: '#001026',
+    almostBlack: '#1c1c2c',
     success: '#66f6a9',
-    error: '#ef6262'
+    error: '#ef6262',
 }
 
 export const backendLink = 'http://10.0.2.2:5000/graphql' // Make sure you change this for production

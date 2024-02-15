@@ -52,7 +52,7 @@ export const Profile = ({navigation, route}) => {
         }
     }, [data, error, loading]);
     return (
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{backgroundColor: designChoices.white}}>
             {profileUser &&
                 <View>
                     <View style={{marginTop: 10}}>{/* User Information */}
