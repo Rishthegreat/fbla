@@ -10,3 +10,4 @@ local.properties
 /backend/venv/
 /node_modules/
 frontend/running instructions.txt
+*.code-workspace

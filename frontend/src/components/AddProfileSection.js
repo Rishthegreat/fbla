@@ -5,7 +5,7 @@ import React, {useCallback, useContext, useState} from "react";
 import {useFocusEffect} from "@react-navigation/native";
 import {CustomDropdown, CustomInput, CustomButton} from "../components";
 import Icon from "react-native-vector-icons/AntDesign";
-import {designChoices} from "../../GlobalConsts";
+import {designChoices, profileSectionsSchema} from "../../GlobalConsts";
 import {useMutation} from "@apollo/client";
 import {UPDATE_PROFILE} from "../graphql";
 import {AuthContext} from "../contexes/auth-context";
@@ -19,17 +19,6 @@ export const AddProfileSection = ({profileUser, setAddSection, refetch}) => {
     const [updateProfileMutation] = useMutation(UPDATE_PROFILE)
     const {setAlert} = useContext(AlertContext)
     const {_id} = useContext(AuthContext)
-    const profileSectionsSchema = { // remember to change this if backend is changed
-        school: {items:['name'], label:'Current School'},
-        colleges: {items:['name'], label:'Colleges'},
-        classes: {items:['name'], label:'Classes'},
-        tests: {items:['name', 'score'], label:'Tests'},
-        clubs: {items:['name', 'position', 'description'], label:'Clubs'},
-        jobsInternships: {items:['position', 'company', 'description'], label:'Jobs and Internships'},
-        communityServices: {items:['position', 'company', 'description'], label:'Community Service'},
-        awards: {items:['name', 'organization', 'description'], label:'Awards'},
-        activities: {items:['name', 'description'], label:'Activities'}
-    }
     useFocusEffect(
         useCallback(() => {
             let tempSectionsLeft = []

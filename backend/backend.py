@@ -11,6 +11,9 @@ app.config['JWT_SECRET_KEY'] = 'yooo this app is so cool'
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
 jwt = JWTManager(app)
 
+@app.route('/image/<id>')
+def image():
+    return None
 
 app.add_url_rule(
     "/graphql",

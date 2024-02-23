@@ -1,4 +1,4 @@
-import json
+import datetime
 
 import bson.objectid
 import graphene
@@ -6,82 +6,12 @@ from pymongo import MongoClient
 from bcrypt import hashpw, gensalt
 from flask_jwt_extended import create_access_token, jwt_required
 from bson.objectid import ObjectId
+from skeleton import Post, User, UserInputType, PostInputType
 
 client = MongoClient("mongodb://localhost:27017/")
 db = client["fbla"]
 
 
-class User(graphene.ObjectType):
-    class Profile(graphene.ObjectType):
-        class School(graphene.ObjectType):
-            name = graphene.String()
-
-        class College(graphene.ObjectType):
-            name = graphene.String()
-            _id = graphene.String(name='_id')
-
-        class _Class(graphene.ObjectType):
-            name = graphene.String()
-            _id = graphene.String(name='_id')
-
-        class Test(graphene.ObjectType):
-            name = graphene.String()
-            score = graphene.String()
-            _id = graphene.String(name='_id')
-
-        class Club(graphene.ObjectType):
-            name = graphene.String()
-            position = graphene.String()
-            description = graphene.String()
-            _id = graphene.String(name='_id')
-
-        class JobInternship(graphene.ObjectType):
-            position = graphene.String()
-            company = graphene.String()
-            description = graphene.String()
-            _id = graphene.String(name='_id')
-
-        class CommunityService(graphene.ObjectType):
-            position = graphene.String()
-            organization = graphene.String()
-            hours = graphene.Float()
-            description = graphene.String()
-            _id = graphene.String(name='_id')
-
-        class Award(graphene.ObjectType):
-            name = graphene.String()
-            organization = graphene.String()
-            description = graphene.String()
-            _id = graphene.String(name='_id')
-
-        class Activity(graphene.ObjectType):
-            name = graphene.String()
-            description = graphene.String()
-            activityId = graphene.String()
-
-        school = graphene.Field(School)
-        colleges = graphene.List(College)
-        classes = graphene.List(_Class)
-        tests = graphene.List(Test)
-        clubs = graphene.List(Club)
-        jobsInternships = graphene.List(JobInternship)
-        communityServices = graphene.List(CommunityService)
-        awards = graphene.List(Award)
-        activities = graphene.List(Activity)
-
-    _id = graphene.String(name='_id', required=True)  # graphene auto camcelcases everything so overrides it
-    email = graphene.String(required=True)
-    password = graphene.String(required=True)
-    firstName = graphene.String(required=True)
-    lastName = graphene.String(required=True)
-    profile = graphene.Field(Profile)
-
-
-class UserInputType(graphene.InputObjectType):
-    email = graphene.String(required=True)
-    password = graphene.String(required=True)
-    firstName = graphene.String(required=True)
-    lastName = graphene.String(required=True)
 
 
 class CreateUser(graphene.Mutation):
@@ -125,6 +55,7 @@ class LoginUser(graphene.Mutation):
 class UpdateProfile(graphene.Mutation):
     success = graphene.Boolean()
     message = graphene.String()
+    updatedValue = graphene.JSONString()
 
     class Arguments:
         _id = graphene.String(required=True, name='_id')
@@ -145,8 +76,28 @@ class UpdateProfile(graphene.Mutation):
             else:
                 changes['_id'] = bson.objectid.ObjectId()
                 usersCollection.update_one({"_id": ObjectId(_id)}, {"$push": {f'profile.{section}': changes}})
+                updatedValue = usersCollection.find_one({"_id": ObjectId(_id)}, {f'profile.{section}': {"$elemMatch": {"_id": changes['_id']}}})
+                print(updatedValue)
         return UpdateProfile(success=True, message=None)
 
+class UpdateMultipleProfile(graphene.Mutation):
+    success = graphene.Boolean()
+    message = graphene.String()
+    class Arguments:
+        _id = graphene.String(required=True, name='_id')
+        section = graphene.String(required=True)
+        changes = graphene.JSONString(required=True)
+
+    def mutate(self, info, _id, section, changes):
+        if section != "school":
+            for i in range(0, len(changes)):
+                if '_id' in changes[i]:
+                    changes[i]["_id"] = ObjectId(changes[i]["_id"])
+                else:
+                    changes[i]["_id"] = bson.objectid.ObjectId()
+        usersCollection = db["users"]
+        usersCollection.update_one({"_id": ObjectId(_id)}, {"$set": {f'profile.{section}': changes}})
+        return UpdateMultipleProfile(success=True, message=None)
 
 class DeleteSection(graphene.Mutation):
     success = graphene.Boolean()
@@ -162,6 +113,22 @@ class DeleteSection(graphene.Mutation):
         else:
             usersCollection.update_one({"_id": ObjectId(_id)}, {"$unset": {f'profile.{section}': None}})
         return DeleteSection(success=True, message=None)
+
+class CreatePost(graphene.Mutation):
+    success = graphene.Boolean()
+    message = graphene.String()
+
+    class Arguments:
+        postData = PostInputType(required=True)
+
+    def mutate(self, info, postData):
+        postData["timestamp"] = datetime.datetime.now()
+        postData["_id"] = bson.objectid.ObjectId()
+        postData["likes"] = 0
+        postsCollection = db["posts"]
+        postsCollection.insert_one(postData)
+        return CreatePost(success=True, message=None)
+
 
 class Query(graphene.ObjectType):
     users = graphene.List(User)
@@ -186,6 +153,9 @@ class Mutation(graphene.ObjectType):
     loginUser = LoginUser.Field()
     updateProfile = UpdateProfile.Field()
     deleteSection = DeleteSection.Field()
+    updateMultipleProfile = UpdateMultipleProfile.Field()
+
+    createPost = CreatePost.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)

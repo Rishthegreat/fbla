@@ -47,3 +47,11 @@ export const DELETE_SECTION = gql`
         }
     }
 `
+export const UPDATE_MULTIPLE_PROFILE = gql`
+    mutation UpdateMultipleProfile($_id: String!, $section: String!, $changes: JSONString!) {
+        updateMultipleProfile(_id: $_id, section: $section, changes: $changes) {
+            success
+            message
+        }
+    }
+`

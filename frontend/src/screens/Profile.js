@@ -106,8 +106,8 @@ export const Profile = ({navigation, route}) => {
                                 profileUser.profile.clubs.map(value => {
                                     return (
                                         <View>
+                                            <Text style={styles.subsectionHeader}>{value.position}</Text>
                                             <Text>{value.name}</Text>
-                                            <Text>{value.position}</Text>
                                             <Text>{value.description}</Text>
                                         </View>
                                     )
@@ -175,8 +175,8 @@ export const Profile = ({navigation, route}) => {
                                 profileUser.profile.tests.map(value => {
                                     return (
                                         <View>
-                                            <Text>{value.name}</Text>
-                                            <Text>{value.score}</Text>
+                                            <Text style={styles.subsectionHeader}>{value.name}</Text>
+                                            <Text>Score: {value.score}</Text>
                                         </View>
                                     )
                                 })
@@ -220,12 +220,17 @@ const styles = StyleSheet.create({
         marginVertical: 5
     },
     sectionHeader: {
-        fontSize: 17,
-        fontWeight: "bold"
+        fontSize: 18,
+        fontWeight: "bold",
+        marginBottom: 10
     },
     editIcon: {
         position: "absolute",
         top: 10,
         right: 10
+    },
+    subsectionHeader: {
+        fontWeight: "bold",
+        fontSize: 16
     }
 })
