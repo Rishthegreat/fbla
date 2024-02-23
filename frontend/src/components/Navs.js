@@ -23,7 +23,7 @@ export const BottomNav = ({navigation}) => {
     const {currentTab, _id} = useContext(AuthContext)
     const bottomBarList = [
         {navigateTo: 'Homepage', text: 'Home', icon: 'home'},
-        {navigateTo: 'Post', text: 'Post', icon: 'plus'},
+        {navigateTo: 'MakePost', text: 'Post', icon: 'plus'},
         {navigateTo: 'Profile', text: 'Profile', icon: 'user'},
         {navigateTo: 'AppSettings', text: 'Settings', icon: 'setting'},
         {navigateTo: 'Colleges', text: 'Colleges', icon: 'book'}

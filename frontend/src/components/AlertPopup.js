@@ -19,7 +19,7 @@ const AnimatedPopup = ({text, type, setAlert}) => {
                     duration: 200,
                     useNativeDriver: true
                 }).start(() => setAlert('', ''))
-            }, 2000)
+            }, 1500)
         })
     }, []);
     const bgSelector = () => {

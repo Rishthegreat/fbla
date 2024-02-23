@@ -55,3 +55,19 @@ export const UPDATE_MULTIPLE_PROFILE = gql`
         }
     }
 `
+
+export const CREATE_POST = gql`
+    mutation CreatePost($owner: String!, $title: String!, $content: String!) {
+        createPost(
+            postData: {
+                owner: $owner,
+                title: $title,
+                content: $content
+            }
+        ) 
+        {
+            success
+            message
+        }
+    }
+`

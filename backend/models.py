@@ -133,7 +133,7 @@ class CreatePost(graphene.Mutation):
 class Query(graphene.ObjectType):
     users = graphene.List(User)
     user = graphene.Field(User, _id=graphene.String(name='_id', required=True))
-
+    posts = graphene.List(Post, _id=graphene.String(name='_id', required=True), page=graphene.Int(required=False, default_value=None))
     @jwt_required()
     def resolve_users(self, info):
         usersCollection = db["users"]
@@ -146,6 +146,15 @@ class Query(graphene.ObjectType):
         if userData:
             return User(**userData)
         return None
+    @jwt_required()
+    def resolve_posts(self, info, _id, page=None):
+        postsCollection = db["posts"]
+        # for now, just returning all posts, but later need to return by sorting, page, etc
+        postsToReturn = postsCollection.find()
+        if postsToReturn:
+            return postsToReturn
+        else:
+            return None
 
 
 class Mutation(graphene.ObjectType):

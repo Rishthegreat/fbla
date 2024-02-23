@@ -2,11 +2,9 @@
 import {View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView} from 'react-native';
 import {useContext} from "react";
 import {AuthContext} from "../contexes/auth-context";
-import {AppSettings} from "./AppSettings";
 import {BottomNav, TopNav} from "../components";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import {Homepage} from "./Homepage";
-import {Profile} from "./Profile";
+import {Profile, Homepage, AppSettings, MakePost} from "../screens";
 import {CustomButton} from "../components";
 import {designChoices} from "../../GlobalConsts";
 
@@ -35,6 +33,7 @@ const MainApp = ({navigation}) => {
                     <TabsStack.Screen name='Homepage' options={{headerShown: false}} component={Homepage}/>
                     <TabsStack.Screen name='AppSettings' options={{headerShown: false}} component={AppSettings}/>
                     <TabsStack.Screen name='Profile' options={{headerShown: false}} component={Profile}/>
+                    <TabsStack.Screen name={'MakePost'} options={{headerShown: false}} component={MakePost} />
                 </TabsStack.Navigator>
             </View>
             <View style={styles.bottom_nav_container}>

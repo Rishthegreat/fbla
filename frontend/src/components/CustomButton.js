@@ -1,13 +1,14 @@
 /* eslint-disable */
 
-import {View, Text, StyleSheet, Pressable} from "react-native";
+import {View, Text, StyleSheet, Pressable, TouchableOpacity} from "react-native";
 import {designChoices} from "../../GlobalConsts";
 
-export const CustomButton = ({text, onPress, style}) => {
+export const CustomButton = ({text, onPress, style, type}) => {
+    const typeStyle = {backgroundColor: type ? designChoices[type] : designChoices.primary}
     return (
-        <Pressable onPress={onPress} style={{...styles.container, ...style}}>
+        <TouchableOpacity onPress={onPress} style={{...styles.container, ...style, ...typeStyle}}>
             <Text style={styles.text}>{text}</Text>
-        </Pressable>
+        </TouchableOpacity>
     )
 }
 
@@ -15,7 +16,6 @@ export const CustomButton = ({text, onPress, style}) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: designChoices.primary,
         width: '100%',
         alignItems: 'center',
         borderRadius: 3,
