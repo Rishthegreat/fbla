@@ -57,3 +57,17 @@ export const WHOLE_USER_BY_ID = gql`
         }
     }
 `
+
+export const GET_POSTS = gql`
+    query GetPosts($_id: String!, $page: Int) {
+        posts(_id: $_id, page: $page) {
+            _id
+            owner
+            title
+            likes
+            content
+            image
+            timestamp
+        }
+    }
+`

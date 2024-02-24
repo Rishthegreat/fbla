@@ -34,7 +34,7 @@ export const MakePost = ({navigation}) => {
         }
     }
     return (
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{backgroundColor: designChoices.white, flexGrow: 1, paddingTop: 15}}>
+        <ScrollView contentContainerStyle={{backgroundColor: designChoices.white, flexGrow: 1, paddingTop: 15}}>
             <TouchableOpacity style={styles.closeContainer} onPress={() => navigation.navigate('Homepage')}>
                 <Icon name={'close'} size={20} color={designChoices.almostBlack} />
             </TouchableOpacity>
