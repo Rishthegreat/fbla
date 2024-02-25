@@ -68,6 +68,10 @@ export const GET_POSTS = gql`
             content
             image
             timestamp
+            user {
+                firstName
+                lastName
+            }
         }
     }
 `

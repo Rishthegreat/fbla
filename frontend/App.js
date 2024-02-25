@@ -6,7 +6,7 @@ import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {AuthProvider} from "./src/contexes/auth-context";
 import {ApolloClient, InMemoryCache, ApolloProvider, createHttpLink} from '@apollo/client';
-import {backendLink} from "./GlobalConsts";
+import {backendLink, designChoices} from "./GlobalConsts";
 import {AlertProvider} from "./src/contexes/AlertContext";
 import {AlertPopup} from "./src/components";
 import {setContext} from "@apollo/client/link/context";
@@ -59,7 +59,7 @@ export const App = () => {
 const styles = StyleSheet.create({
     root: {
         flex: 1,
-        position: "relative"
+        position: "relative",
     },
     alert_container: {
         top: 10,

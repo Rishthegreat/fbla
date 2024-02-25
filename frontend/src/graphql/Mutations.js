@@ -57,12 +57,13 @@ export const UPDATE_MULTIPLE_PROFILE = gql`
 `
 
 export const CREATE_POST = gql`
-    mutation CreatePost($owner: String!, $title: String!, $content: String!) {
+    mutation CreatePost($owner: String!, $title: String!, $content: String!, $image: String) {
         createPost(
             postData: {
                 owner: $owner,
                 title: $title,
-                content: $content
+                content: $content,
+                image: $image
             }
         ) 
         {

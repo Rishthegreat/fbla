@@ -14,6 +14,8 @@ export const designChoices = {
 
 export const backendLink = 'http://10.0.2.2:5000/graphql' // Make sure you change this for production
 // This is not the actual ip address its just that whn you use an emulator, then you use this ip to access local machine's localhost
+export const uploadPictureLink = 'http://10.0.2.2:5000/upload'
+export const getPictureLink = 'http://10.0.2.2:5000/images'
 export const profileSectionsSchema = { // remember to change this if backend is changed
     school: {items:['name'], label:'Current School'},
     colleges: {items:['name'], label:'Colleges'},

@@ -15,7 +15,7 @@ export const Homepage = ({navigation}) => {
     const {setCurrentTab, _id} = useContext(AuthContext)
     const [page, setPage] = useState(null)
     const [posts, setPosts] = useState([])
-    const {data, error, loading, refetch} = useQuery(GET_POSTS, {variables: {_id: _id, page: page}, onError: (e) => console.log(JSON.stringify(e, null, 2))})
+    const {data, error, loading, refetch} = useQuery(GET_POSTS, {variables: {_id: _id, page: page}, onError: (e) => console.log(JSON.stringify(e, null, 2)), fetchPolicy: 'network-only'})
     useFocusEffect ( // Run each time the tab is loaded
         useCallback(() => {
             setCurrentTab('Homepage')
@@ -39,13 +39,15 @@ export const Homepage = ({navigation}) => {
     }, [data]);
     return (
         <ScrollView style={styles.root}>
-            <View>
-                <Text>Spark Social</Text>
-            </View>
-            <View>
-                {posts && posts.map((post) => (
-                    <Post postData={post} />
-                ))}
+            <View style={{paddingHorizontal: 20, width: "100%", backgroundColor: designChoices.white, flexGrow: 1}}>
+                <View>
+                    <Text>Spark Social</Text>
+                </View>
+                <View>
+                    {posts && posts.map((post) => (
+                        <Post postData={post} />
+                    ))}
+                </View>
             </View>
         </ScrollView>
     )

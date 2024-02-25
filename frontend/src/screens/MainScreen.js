@@ -54,12 +54,11 @@ export const MainScreen = ({navigation}) => {
 const styles = StyleSheet.create({
     bigContainer: {
         display: "flex",
-        height: '100%'
+        height: '100%',
     },
     root: {
         flexGrow: 1,
-        paddingHorizontal: 20,
-        backgroundColor: designChoices.white
+        //paddingHorizontal: 20,
     },
     bottom_nav_container: {
         width: '100%',

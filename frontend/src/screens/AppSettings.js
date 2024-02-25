@@ -32,15 +32,17 @@ export const AppSettings = ({navigation}) => {
         useCallback(() => setCurrentTab('AppSettings'), [])
     )
     return (
-        <View style={styles.root}>
-            <Image source={TempLogo} style={styles.user_pic} resizeMode='contain' />
-            <Text style={styles.title}>Change and View Settings</Text>
-            <View style={styles.individual_settings_container}>
-                <IndividualSetting name='Account Settings' />
-                <IndividualSetting name='Theme' />
-                <IndividualSetting name='Visibility' />
+        <View style={{paddingHorizontal: 20, width: "100%", backgroundColor: designChoices.white, flexGrow: 1}}>
+            <View style={styles.root}>
+                <Image source={TempLogo} style={styles.user_pic} resizeMode='contain' />
+                <Text style={styles.title}>Change and View Settings</Text>
+                <View style={styles.individual_settings_container}>
+                    <IndividualSetting name='Account Settings' />
+                    <IndividualSetting name='Theme' />
+                    <IndividualSetting name='Visibility' />
+                </View>
+                <CustomButton text={'Log Out'} onPress={logout} />
             </View>
-            <CustomButton text={'Log Out'} onPress={logout} />
         </View>
     )
 }

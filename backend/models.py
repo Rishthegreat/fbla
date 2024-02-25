@@ -119,7 +119,7 @@ class CreatePost(graphene.Mutation):
     message = graphene.String()
 
     class Arguments:
-        postData = PostInputType(required=True)
+        postData = PostInputType()
 
     def mutate(self, info, postData):
         postData["timestamp"] = datetime.datetime.now()
@@ -128,7 +128,6 @@ class CreatePost(graphene.Mutation):
         postsCollection = db["posts"]
         postsCollection.insert_one(postData)
         return CreatePost(success=True, message=None)
-
 
 class Query(graphene.ObjectType):
     users = graphene.List(User)
@@ -151,8 +150,13 @@ class Query(graphene.ObjectType):
         postsCollection = db["posts"]
         # for now, just returning all posts, but later need to return by sorting, page, etc
         postsToReturn = postsCollection.find()
+        usersCollection = db["users"]
         if postsToReturn:
-            return postsToReturn
+            posts_list = list(postsToReturn)
+            for i in range(0, len(posts_list)):
+                user = usersCollection.find_one({"_id": ObjectId(posts_list[i]["owner"])})
+                posts_list[i]["user"] = User(**user)
+            return posts_list
         else:
             return None
 

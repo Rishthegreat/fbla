@@ -52,162 +52,164 @@ export const Profile = ({navigation, route}) => {
         }
     }, [data, error, loading]);
     return (
-        <ScrollView showsVerticalScrollIndicator={false} style={{backgroundColor: designChoices.white}}>
-            {profileUser &&
-                <View>
-                    <View style={{marginTop: 10}}>{/* User Information */}
-                        <View></View>{/* Picture */}
-                        <Text>{profileUser.firstName} {profileUser.lastName}</Text>
-                        {profileUser.profile?.school && <Text>Student at {profileUser.profile.school.name}</Text>}
-                        <Text>Contact: {profileUser.email}</Text>
-                        {selfProfile &&
-                            <View>
-                                <CustomButton text={'Add Information to Section'} onPress={() => setAddSection(true)}/>
+        <View style={{paddingHorizontal: 20, width: "100%", backgroundColor: designChoices.white, flexGrow: 1}}>
+            <ScrollView showsVerticalScrollIndicator={false} style={{backgroundColor: designChoices.white}}>
+                {profileUser &&
+                    <View>
+                        <View style={{marginTop: 10}}>{/* User Information */}
+                            <View></View>{/* Picture */}
+                            <Text>{profileUser.firstName} {profileUser.lastName}</Text>
+                            {profileUser.profile?.school && <Text>Student at {profileUser.profile.school.name}</Text>}
+                            <Text>Contact: {profileUser.email}</Text>
+                            {selfProfile &&
+                                <View>
+                                    <CustomButton text={'Add Information to Section'} onPress={() => setAddSection(true)}/>
+                                </View>
+                            }
+                        </View>
+                        {newProfile && selfProfile &&
+                            <View>{/* Prompt to set up new profile */}
+                                <Text>Finish setting up your profile by adding more sections</Text>
                             </View>
                         }
+                        {profileUser.profile?.classes &&
+                            <ProfileView selfProfile={selfProfile} sectionType='classes' setEditSectionType={setEditSectionType}>{/* Classes taken in school */}
+                                <Text style={styles.sectionHeader}>Classes I am Currently Taking</Text>
+                                {
+                                    profileUser.profile.classes.map(value => {
+                                        return (
+                                            <View>
+                                                <Text>{value.name}</Text>
+                                            </View>
+                                        )
+                                    })
+                                }
+                            </ProfileView>
+                        }
+                        {profileUser.profile?.colleges &&
+                            <ProfileView selfProfile={selfProfile} sectionType='colleges' setEditSectionType={setEditSectionType}>{/* colleges I am interested in */}
+                                <Text style={styles.sectionHeader}>Colleges I am Interested in</Text>
+                                {
+                                    profileUser.profile.colleges.map(value => {
+                                        return (
+                                            <View>
+                                                <Text>{value.name}</Text>
+                                            </View>
+                                        )
+                                    })
+                                }
+                            </ProfileView>
+                        }
+                        {profileUser.profile?.clubs &&
+                            <ProfileView selfProfile={selfProfile} sectionType='clubs' setEditSectionType={setEditSectionType}>
+                                <Text style={styles.sectionHeader}>Clubs I Participate In</Text>
+                                {
+                                    profileUser.profile.clubs.map(value => {
+                                        return (
+                                            <View>
+                                                <Text style={styles.subsectionHeader}>{value.position}</Text>
+                                                <Text>{value.name}</Text>
+                                                <Text>{value.description}</Text>
+                                            </View>
+                                        )
+                                    })
+                                }
+                            </ProfileView>
+                        }
+
+                        {profileUser.profile?.jobsInternships &&
+                            <ProfileView selfProfile={selfProfile} sectionType='jobsInternships' setEditSectionType={setEditSectionType}>
+                                <Text style={styles.sectionHeader}>Jobs and Internships</Text>
+                                {
+                                    profileUser.profile.jobsInternships.map(value => {
+                                        return (
+                                            <View>
+                                                <Text>{value.position}</Text>
+                                                <Text>{value.company}</Text>
+                                                <Text>{value.description}</Text>
+                                            </View>
+                                        )
+                                    })
+                                }
+                            </ProfileView>
+                        }
+
+                        {profileUser.profile?.communityServices &&
+                            <ProfileView selfProfile={selfProfile} sectionType='communityServices' setEditSectionType={setEditSectionType}>
+                                <Text style={styles.sectionHeader}>Community Service</Text>
+                                {
+                                    profileUser.profile.communityServices.map(value => {
+                                        return (
+                                            <View>
+                                                <Text>{value.position}</Text>
+                                                <Text>{value.organization}</Text>
+                                                <Text>{value.hours}</Text>
+                                                <Text>{value.description}</Text>
+                                            </View>
+                                        )
+                                    })
+                                }
+                            </ProfileView>
+                        }
+
+                        {profileUser.profile?.awards &&
+                            <ProfileView selfProfile={selfProfile} sectionType='awards' setEditSectionType={setEditSectionType}>
+                                <Text style={styles.sectionHeader}>Awards</Text>
+                                {
+                                    profileUser.profile.awards.map(value => {
+                                        return (
+                                            <View>
+                                                <Text>{value.name}</Text>
+                                                <Text>{value.organization}</Text>
+                                                <Text>{value.description}</Text>
+                                            </View>
+                                        )
+                                    })
+                                }
+                            </ProfileView>
+                        }
+
+                        {profileUser.profile?.tests &&
+                            <ProfileView selfProfile={selfProfile} sectionType='tests' setEditSectionType={setEditSectionType}>
+                                <Text style={styles.sectionHeader}>Tests I have Taken</Text>
+                                {
+                                    profileUser.profile.tests.map(value => {
+                                        return (
+                                            <View>
+                                                <Text style={styles.subsectionHeader}>{value.name}</Text>
+                                                <Text>Score: {value.score}</Text>
+                                            </View>
+                                        )
+                                    })
+                                }
+                            </ProfileView>
+                        }
+
+                        {profileUser.profile?.activities &&
+                            <ProfileView selfProfile={selfProfile} sectionType='activities' setEditSectionType={setEditSectionType}>
+                                <Text style={styles.sectionHeader}>Other Activities</Text>
+                                {
+                                    profileUser.profile.activities.map(value => {
+                                        return (
+                                            <View>
+                                                <Text>{value.name}</Text>
+                                                <Text>{value.description}</Text>
+                                            </View>
+                                        )
+                                    })
+                                }
+                            </ProfileView>
+                        }
+                        {addSection &&
+                            <AddProfileSection refetch={refetch} setAddSection={setAddSection} profileUser={profileUser}/>
+                        }
+                        {editSectionType &&
+                            <ProfileEditSectionView refetch={refetch} editSectionType={editSectionType} setEditSectionType={setEditSectionType} profileUser={profileUser} />
+                        }
                     </View>
-                    {newProfile && selfProfile &&
-                        <View>{/* Prompt to set up new profile */}
-                            <Text>Finish setting up your profile by adding more sections</Text>
-                        </View>
-                    }
-                    {profileUser.profile?.classes &&
-                        <ProfileView selfProfile={selfProfile} sectionType='classes' setEditSectionType={setEditSectionType}>{/* Classes taken in school */}
-                            <Text style={styles.sectionHeader}>Classes I am Currently Taking</Text>
-                            {
-                                profileUser.profile.classes.map(value => {
-                                    return (
-                                        <View>
-                                            <Text>{value.name}</Text>
-                                        </View>
-                                    )
-                                })
-                            }
-                        </ProfileView>
-                    }
-                    {profileUser.profile?.colleges &&
-                        <ProfileView selfProfile={selfProfile} sectionType='colleges' setEditSectionType={setEditSectionType}>{/* colleges I am interested in */}
-                            <Text style={styles.sectionHeader}>Colleges I am Interested in</Text>
-                            {
-                                profileUser.profile.colleges.map(value => {
-                                    return (
-                                        <View>
-                                            <Text>{value.name}</Text>
-                                        </View>
-                                    )
-                                })
-                            }
-                        </ProfileView>
-                    }
-                    {profileUser.profile?.clubs &&
-                        <ProfileView selfProfile={selfProfile} sectionType='clubs' setEditSectionType={setEditSectionType}>
-                            <Text style={styles.sectionHeader}>Clubs I Participate In</Text>
-                            {
-                                profileUser.profile.clubs.map(value => {
-                                    return (
-                                        <View>
-                                            <Text style={styles.subsectionHeader}>{value.position}</Text>
-                                            <Text>{value.name}</Text>
-                                            <Text>{value.description}</Text>
-                                        </View>
-                                    )
-                                })
-                            }
-                        </ProfileView>
-                    }
-
-                    {profileUser.profile?.jobsInternships &&
-                        <ProfileView selfProfile={selfProfile} sectionType='jobsInternships' setEditSectionType={setEditSectionType}>
-                            <Text style={styles.sectionHeader}>Jobs and Internships</Text>
-                            {
-                                profileUser.profile.jobsInternships.map(value => {
-                                    return (
-                                        <View>
-                                            <Text>{value.position}</Text>
-                                            <Text>{value.company}</Text>
-                                            <Text>{value.description}</Text>
-                                        </View>
-                                    )
-                                })
-                            }
-                        </ProfileView>
-                    }
-
-                    {profileUser.profile?.communityServices &&
-                        <ProfileView selfProfile={selfProfile} sectionType='communityServices' setEditSectionType={setEditSectionType}>
-                            <Text style={styles.sectionHeader}>Community Service</Text>
-                            {
-                                profileUser.profile.communityServices.map(value => {
-                                    return (
-                                        <View>
-                                            <Text>{value.position}</Text>
-                                            <Text>{value.organization}</Text>
-                                            <Text>{value.hours}</Text>
-                                            <Text>{value.description}</Text>
-                                        </View>
-                                    )
-                                })
-                            }
-                        </ProfileView>
-                    }
-
-                    {profileUser.profile?.awards &&
-                        <ProfileView selfProfile={selfProfile} sectionType='awards' setEditSectionType={setEditSectionType}>
-                            <Text style={styles.sectionHeader}>Awards</Text>
-                            {
-                                profileUser.profile.awards.map(value => {
-                                    return (
-                                        <View>
-                                            <Text>{value.name}</Text>
-                                            <Text>{value.organization}</Text>
-                                            <Text>{value.description}</Text>
-                                        </View>
-                                    )
-                                })
-                            }
-                        </ProfileView>
-                    }
-
-                    {profileUser.profile?.tests &&
-                        <ProfileView selfProfile={selfProfile} sectionType='tests' setEditSectionType={setEditSectionType}>
-                            <Text style={styles.sectionHeader}>Tests I have Taken</Text>
-                            {
-                                profileUser.profile.tests.map(value => {
-                                    return (
-                                        <View>
-                                            <Text style={styles.subsectionHeader}>{value.name}</Text>
-                                            <Text>Score: {value.score}</Text>
-                                        </View>
-                                    )
-                                })
-                            }
-                        </ProfileView>
-                    }
-
-                    {profileUser.profile?.activities &&
-                        <ProfileView selfProfile={selfProfile} sectionType='activities' setEditSectionType={setEditSectionType}>
-                            <Text style={styles.sectionHeader}>Other Activities</Text>
-                            {
-                                profileUser.profile.activities.map(value => {
-                                    return (
-                                        <View>
-                                            <Text>{value.name}</Text>
-                                            <Text>{value.description}</Text>
-                                        </View>
-                                    )
-                                })
-                            }
-                        </ProfileView>
-                    }
-                    {addSection &&
-                        <AddProfileSection refetch={refetch} setAddSection={setAddSection} profileUser={profileUser}/>
-                    }
-                    {editSectionType &&
-                        <ProfileEditSectionView refetch={refetch} editSectionType={editSectionType} setEditSectionType={setEditSectionType} profileUser={profileUser} />
-                    }
-                </View>
-            }
-        </ScrollView>
+                }
+            </ScrollView>
+        </View>
     )
 }
 

@@ -84,10 +84,11 @@ class Post(graphene.ObjectType):
     content = graphene.String(required=True)
     image = graphene.String()
     timestamp = graphene.DateTime(required=True)
+    user = graphene.Field(User)
 
 
 class PostInputType(graphene.InputObjectType):
     owner = graphene.String(required=True)
     title = graphene.String(required=True)
     content = graphene.String(required=True)
-
+    image = graphene.String()
