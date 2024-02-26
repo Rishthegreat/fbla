@@ -6,11 +6,15 @@ import {designChoices} from "../../GlobalConsts";
 import {useContext, useEffect, useRef, useState} from "react";
 import {AuthContext} from "../contexes/auth-context";
 import Logo from '../../assets/images/Logo.png'
+import {useLazyQuery} from "@apollo/client";
+import {SEARCH} from "../graphql";
 
 
 export const TopNav = () => {
     const [searchText, setSearchText] = useState("")
     const textInputRef = useRef(null)
+    const [searchQuery] = useLazyQuery(SEARCH)
+    const {_id} = useContext(AuthContext)
     const startSearching = () => {
         textInputRef.current.focus()
     }
@@ -27,7 +31,11 @@ export const TopNav = () => {
     }, []);
     const searchDataBaseAndUpdateText = (value) => {
         setSearchText(value)
-        // Implement a search and query to backend for new data
+        searchQuery({variables: {_id: _id, searchTerm: value, filters: null}})
+            .then(r => {
+                console.log(r.data.search)
+                //console.log(r.data)
+            })
     }
     return (
         <View style={stylesTopNav.root}>
@@ -84,8 +92,8 @@ export const BottomNav = ({navigation}) => {
             <View style={styles.bottom_nav_container}>
                 {bottomBarList.map((value, key) => {
                     return (
-                        <TouchableOpacity key={key} style={{...styles.tab_container, backgroundColor: currentTab === value.navigateTo ? '#b4b3b3' : designChoices.white}} onPress={() => navigation.navigate(value.navigateTo, value.navigateTo === 'Profile'? {profileId: _id} : null)}>
-                            <IconWithText text={value.text} icon={value.icon} textColor={designChoices.almostBlack} />
+                        <TouchableOpacity key={key} style={{...styles.tab_container, backgroundColor: designChoices.white}} onPress={() => navigation.navigate(value.navigateTo, value.navigateTo === 'Profile'? {profileId: _id} : null)}>
+                            <IconWithText text={value.text} icon={value.icon} textColor={currentTab === value.navigateTo ? designChoices.secondary : designChoices.almostBlack} color={currentTab === value.navigateTo ? designChoices.secondary : designChoices.almostBlack} />
                         </TouchableOpacity>
                     )
                 })}
@@ -102,7 +110,7 @@ const styles = StyleSheet.create({
     bottom_nav_big_container: {
         display: "flex",
         width: '100%',
-        borderTopColor: "black",
+        borderTopColor: "gray",
         borderStyle: "solid",
         borderTopWidth: 0.5
     },

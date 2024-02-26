@@ -92,3 +92,8 @@ class PostInputType(graphene.InputObjectType):
     title = graphene.String(required=True)
     content = graphene.String(required=True)
     image = graphene.String()
+
+
+class SearchObject(graphene.ObjectType):
+    posts = graphene.List(Post)
+    users = graphene.List(User)

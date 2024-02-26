@@ -77,10 +77,18 @@ export const GET_POSTS = gql`
 `
 
 export const SEARCH = gql`
-    query Search($_id: String!, $searchTerm: String, $filters: JSONString!) {
-        search(_id: $_id, searchTerm: $searchTerm, filteres: $filters) {
-            users
-            posts
+    query Search($_id: String!, $searchTerm: String, $filters: JSONString) {
+        search(_id: $_id, searchTerm: $searchTerm, filters: $filters) {
+            posts {
+                _id
+                title
+                content
+            }
+            users {
+                _id
+                firstName
+                lastName
+            }
         }
     }
 `

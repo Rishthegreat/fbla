@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from bcrypt import hashpw, gensalt
 from flask_jwt_extended import create_access_token, jwt_required
 from bson.objectid import ObjectId
-from skeleton import Post, User, UserInputType, PostInputType
+from skeleton import Post, User, UserInputType, PostInputType, SearchObject
 
 client = MongoClient("mongodb://localhost:27017/")
 db = client["fbla"]
@@ -133,6 +133,7 @@ class Query(graphene.ObjectType):
     users = graphene.List(User)
     user = graphene.Field(User, _id=graphene.String(name='_id', required=True))
     posts = graphene.List(Post, _id=graphene.String(name='_id', required=True), page=graphene.Int(required=False, default_value=None))
+    search = graphene.Field(SearchObject, _id=graphene.String(name='_id', required=True), searchTerm=graphene.String(required=False, default_value=None), filters=graphene.JSONString(required=False, default_value=None))
     @jwt_required()
     def resolve_users(self, info):
         usersCollection = db["users"]
@@ -159,6 +160,27 @@ class Query(graphene.ObjectType):
             return posts_list
         else:
             return None
+
+    def resolve_search(self, info, _id, searchTerm=None, filters=None):
+        postsCollection = db["posts"]
+        usersCollection = db["users"]
+        if searchTerm:
+            regex_pattern = f'.*{searchTerm}.*'
+            posts = postsCollection.find({
+                "$or": [
+                    {"content": {"$regex": regex_pattern, "$options": "i"}},
+                    {"title": {"$regex": regex_pattern, "$options": "i"}}
+                ]
+            })
+            users = usersCollection.find({
+                "$or": [
+                    {"firstName": {"$regex": regex_pattern, "$options": "i"}},
+                    {"lastName": {"$regex": regex_pattern, "$options": "i"}},
+                    {"profile.school.name": {"$regex": regex_pattern, "$options": "i"}}
+                ]
+            })
+            return SearchObject(posts=posts, users=users)
+        return None
 
 
 class Mutation(graphene.ObjectType):
