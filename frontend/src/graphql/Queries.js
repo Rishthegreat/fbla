@@ -75,3 +75,12 @@ export const GET_POSTS = gql`
         }
     }
 `
+
+export const SEARCH = gql`
+    query Search($_id: String!, $searchTerm: String, $filters: JSONString!) {
+        search(_id: $_id, searchTerm: $searchTerm, filteres: $filters) {
+            users
+            posts
+        }
+    }
+`

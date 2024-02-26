@@ -8,7 +8,7 @@ import {useAlert} from "../hooks/useAlert";
 import {designChoices} from "../../GlobalConsts";
 import {useLazyQuery, useQuery} from "@apollo/client";
 import {GET_POSTS} from "../graphql";
-import {Post} from "../components";
+import {Post, TopNav} from "../components";
 
 
 export const Homepage = ({navigation}) => {
@@ -25,7 +25,6 @@ export const Homepage = ({navigation}) => {
     useEffect(() => {
         if (!error && !loading) {
             setPosts(prev => {
-                console.log("didstuff")
                 let newPrev = [...prev]
                 for (let i = 0; i < data.posts.length; i++) {
                     let postWithId = prev.filter(p => p['_id'] === data.posts[i]['_id'])
@@ -33,30 +32,40 @@ export const Homepage = ({navigation}) => {
                         newPrev.push(data.posts[i])
                     }
                 }
+                newPrev.sort((a, b)=> new Date(b.timestamp) - new Date(a.timestamp))
                 return newPrev
             })
         }
     }, [data]);
     return (
-        <ScrollView style={styles.root}>
-            <View style={{paddingHorizontal: 20, width: "100%", backgroundColor: designChoices.white, flexGrow: 1}}>
-                <View>
-                    <Text>Spark Social</Text>
-                </View>
-                <View>
-                    {posts && posts.map((post) => (
-                        <Post postData={post} />
-                    ))}
-                </View>
+        <View>
+            <View style={styles.topNav}>
+                <TopNav />
             </View>
-        </ScrollView>
+            <ScrollView style={styles.root}>
+                <View style={{paddingHorizontal: 20, width: "100%", backgroundColor: designChoices.white, flexGrow: 1}}>
+                    <View>
+                        {posts && posts.map((post) => (
+                            <Post postData={post} navigation={navigation} />
+                        ))}
+                    </View>
+                </View>
+            </ScrollView>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     root: {
-        height: '100%',
         width: '100%',
-        backgroundColor: designChoices.white
+        backgroundColor: designChoices.white,
+        marginTop: 60.5
+    },
+    topNav: {
+        zIndex: 1,
+        height: 60.5,
+        overflow: "hidden",
+        position: "absolute",
+        width: "100%"
     }
 })

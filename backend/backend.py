@@ -34,8 +34,10 @@ def upload():
         with Image.open(old_path) as img:
             img = img.convert('RGB')
             img.save(new_path, 'JPEG', quality=85)
+            width, height = img.size
+            print(width, height)
         os.remove(old_path)
-        return {'message': 'Image uploaded successfully'}, 200
+        return {'message': 'Image uploaded successfully', 'width': width, 'height': height}, 200
     except Exception as e:
         return {'message': 'Error uploading image', 'error': str(e)}, 500
 

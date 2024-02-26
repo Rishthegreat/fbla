@@ -60,7 +60,8 @@ export const MakePost = ({navigation}) => {
                 body: formData
             })
             if (response.ok) {
-                console.log('Image uploaded')
+                const jsonData = await response.json()
+                console.log(jsonData)
                 return name.split('.')[0]
             } else {
                 console.error('Image not uploaded')

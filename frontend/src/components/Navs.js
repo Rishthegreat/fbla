@@ -1,23 +1,74 @@
 /* eslint-disable */
-import {Image, StyleSheet, TouchableOpacity, View, Text} from "react-native";
+import {Image, StyleSheet, TouchableOpacity, View, Text, TextInput, Keyboard} from "react-native";
 import {IconWithText} from "../components";
 import Icon from "react-native-vector-icons/AntDesign";
 import {designChoices} from "../../GlobalConsts";
-import {useContext} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {AuthContext} from "../contexes/auth-context";
+import Logo from '../../assets/images/Logo.png'
+
 
 export const TopNav = () => {
+    const [searchText, setSearchText] = useState("")
+    const textInputRef = useRef(null)
+    const startSearching = () => {
+        textInputRef.current.focus()
+    }
+    const keyboardHideCallback = () => {
+        textInputRef.current.blur?.()
+    }
+
+    useEffect(() => {
+        const keyboardDidHideSubscription = Keyboard.addListener('keyboardDidHide', keyboardHideCallback);
+
+        return () => {
+            keyboardDidHideSubscription?.remove();
+        };
+    }, []);
+    const searchDataBaseAndUpdateText = (value) => {
+        setSearchText(value)
+        // Implement a search and query to backend for new data
+    }
     return (
-        <View>
-            <View>
-                <View>
-                    <Icon name={'search1'} size={20} color={'#000000'} />
-                </View>
-            </View>
+        <View style={stylesTopNav.root}>
+            <Image source={Logo} resizeMode={"contain"} style={stylesTopNav.logoStyle} />
+            <TouchableOpacity onPress={startSearching} style={stylesTopNav.searchContainer}>
+                <Icon name='search1' size={20} color={designChoices.almostBlack} />
+                <TextInput ref={textInputRef} value={searchText} onChangeText={searchDataBaseAndUpdateText} multiline={false} placeholder={'Search'} style={{padding: 0}} />
+            </TouchableOpacity>
         </View>
     )
 }
 
+const stylesTopNav = StyleSheet.create({
+    root: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-end",
+        alignItems: "center",
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderBottomColor: "gray",
+        borderStyle: "solid",
+        borderBottomWidth: 0.5,
+        gap: 15,
+        backgroundColor: designChoices.white
+    },
+    searchContainer: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        backgroundColor: designChoices.offWhite,
+        padding: 6,
+        borderRadius: 3,
+        flex: 1,
+        gap: 5
+    },
+    logoStyle: {
+        width: 40,
+        height: 40
+    }
+})
 
 export const BottomNav = ({navigation}) => {
     const {currentTab, _id} = useContext(AuthContext)

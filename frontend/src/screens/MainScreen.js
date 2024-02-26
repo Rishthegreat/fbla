@@ -28,14 +28,14 @@ const MainApp = ({navigation}) => {
     const {userToken, login, logout} = useContext(AuthContext)
     return (
         <View style={styles.bigContainer}>
-            <View style={styles.root}>
-                <TabsStack.Navigator initialRouteName='Homepage'>
-                    <TabsStack.Screen name='Homepage' options={{headerShown: false}} component={Homepage}/>
-                    <TabsStack.Screen name='AppSettings' options={{headerShown: false}} component={AppSettings}/>
-                    <TabsStack.Screen name='Profile' options={{headerShown: false}} component={Profile}/>
-                    <TabsStack.Screen name={'MakePost'} options={{headerShown: false}} component={MakePost} />
-                </TabsStack.Navigator>
-            </View>
+            <KeyboardAvoidingView behavior={'height'} style={styles.root}>
+                    <TabsStack.Navigator initialRouteName='Homepage'>
+                        <TabsStack.Screen name='Homepage' options={{headerShown: false}} component={Homepage}/>
+                        <TabsStack.Screen name='AppSettings' options={{headerShown: false}} component={AppSettings}/>
+                        <TabsStack.Screen name='Profile' options={{headerShown: false}} component={Profile}/>
+                        <TabsStack.Screen name={'MakePost'} options={{headerShown: false}} component={MakePost} />
+                    </TabsStack.Navigator>
+            </KeyboardAvoidingView>
             <View style={styles.bottom_nav_container}>
                 <BottomNav navigation={navigation} />
             </View>
@@ -61,8 +61,7 @@ const styles = StyleSheet.create({
         //paddingHorizontal: 20,
     },
     bottom_nav_container: {
-        width: '100%',
-        marginTop: "auto"
+        width: '100%'
     },
     countContainer: {
         alignItems: 'center',

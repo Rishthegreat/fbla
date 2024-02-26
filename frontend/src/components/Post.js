@@ -1,7 +1,49 @@
-import {View, Text, StyleSheet, Image} from "react-native";
+import {View, Text, StyleSheet, Image, TouchableOpacity} from "react-native";
 import {designChoices, getPictureLink} from "../../GlobalConsts";
+import {useContext, useState} from "react";
+import {AuthContext} from "../contexes/auth-context";
 
-export const Post = ({postData}) => {
+export const Post = ({postData, navigation}) => {
+    const {_id} = useContext(AuthContext)
+    const [width, setWidth] = useState(0)
+    const [height, setHeight] = useState(0)
+    const pictureLink = getPictureLink + "/" + postData.image
+    const regularSize = 200
+    Image.getSize(pictureLink, (width, height) => {
+        setWidth(width)
+        setHeight(height)
+    })
+    const returnWidth = () => {
+        if (!width || !height) {
+            return regularSize
+        }
+        const aspectRatio = width / height
+        if (aspectRatio === 1) {
+            return regularSize
+        }
+        if (aspectRatio > 1) {
+            return regularSize * aspectRatio
+        }
+        if (aspectRatio < 1) {
+            return regularSize
+        }
+    }
+
+    const returnHeight = () => {
+        if (!width || !height) {
+            return regularSize
+        }
+        const aspectRatio = width / height
+        if (aspectRatio === 1) {
+            return regularSize
+        }
+        if (aspectRatio > 1) {
+            return regularSize
+        }
+        if (aspectRatio < 1) {
+            return regularSize / aspectRatio
+        }
+    }
     const timestampToTimeAgo = (timestamp) => {
         const time = new Date(timestamp)
         const now = new Date()
@@ -31,12 +73,18 @@ export const Post = ({postData}) => {
     }
     return (
         <View style={styles.postContainer}>
-            <Text>{postData.user.firstName} {postData.user.lastName} · {timestampToTimeAgo(postData.timestamp)}</Text>
+            <View style={styles.nameTimeContainer}>
+                <TouchableOpacity onPress={() => navigation.navigate('Profile', {profileId: postData.owner})}>
+                    <Text>{postData.owner === _id ? "Me" : postData.user.firstName + " " + postData.user.lastName}</Text>
+                </TouchableOpacity>
+                <Text> · </Text>
+                <Text>{timestampToTimeAgo(postData.timestamp)}</Text>
+            </View>
             <Text style={styles.title}>{postData.title}</Text>
             <Text>{postData.content}</Text>
             {
                 postData.image &&
-                <Image source={{uri: (getPictureLink + "/" + postData.image)}} style={styles.image} />
+                <Image resizeMethod={"resize"} resizeMode="contain" source={{uri: pictureLink}} style={{...styles.image, width: returnWidth(), height: returnHeight()}} />
             }
         </View>
     )
@@ -45,7 +93,7 @@ export const Post = ({postData}) => {
 const styles = StyleSheet.create({
     postContainer: {
         backgroundColor: designChoices.offWhite,
-        padding: 10,
+        padding: 12,
         marginVertical: 10,
         borderRadius: 3
     },
@@ -54,8 +102,12 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     image: {
-        width: 200,
-        height: 200,
         alignSelf: "center",
+        marginTop: 10,
+        borderRadius: 3
+    },
+    nameTimeContainer: {
+        display: "flex",
+        flexDirection: "row"
     }
 })
