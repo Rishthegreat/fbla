@@ -5,7 +5,7 @@ import {AuthContext} from "../contexes/auth-context";
 import {useFocusEffect} from "@react-navigation/native";
 import {useQuery} from "@apollo/client";
 import {WHOLE_USER_BY_ID} from "../graphql";
-import {AddProfileSection, CustomButton, ProfileEditSectionView} from "../components";
+import {AddProfileSection, CustomButton, ProfileEditSectionView} from "./index";
 import {designChoices} from "../../GlobalConsts";
 import Icon from "react-native-vector-icons/AntDesign";
 
@@ -22,25 +22,16 @@ const ProfileView = ({children, selfProfile, sectionType, setEditSectionType}) =
     )
 }
 
-export const Profile = ({navigation, route}) => {
-    const {setCurrentTab, _id} = useContext(AuthContext)
+export const Profile = ({profileId, selfProfile}) => {
     const [profileUser, setProfileUser] = useState(null)
     // This profile.js will be rendered for all profiles including your own, and it will automatically switch between the user view and non-user view depending on if the profile's id matches the current logged-in user's id
-    const profileId = route.params?.profileId
-    const [selfProfile, setSelfProfile] = useState(profileId === _id)
     const [newProfile, setNewProfile] = useState(true)
     const [addSection, setAddSection] = useState(false)
     const [editSectionType, setEditSectionType] = useState(null)
     const {data, error, loading, refetch} = useQuery(WHOLE_USER_BY_ID, {
         variables: {_id: profileId}, pollInterval: 10000
     })
-    useFocusEffect( // Run each time the tab is loaded
-        useCallback(() => {
-            if (selfProfile) {
-                setCurrentTab('Profile')
-            }
-        }, [setCurrentTab, selfProfile])
-    )
+
     useEffect(() => {
         if (!error && !loading) {
             setProfileUser(data.user)

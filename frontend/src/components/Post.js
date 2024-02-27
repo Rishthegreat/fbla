@@ -2,9 +2,11 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from "react-native";
 import {designChoices, getPictureLink} from "../../GlobalConsts";
 import {useContext, useState} from "react";
 import {AuthContext} from "../contexes/auth-context";
+import {ProfileContext} from "../contexes/ProfileContext";
 
 export const Post = ({postData, navigation}) => {
     const {_id} = useContext(AuthContext)
+    const {setOtherProfileId} = useContext(ProfileContext)
     const [width, setWidth] = useState(0)
     const [height, setHeight] = useState(0)
     const pictureLink = getPictureLink + "/" + postData.image
@@ -71,10 +73,17 @@ export const Post = ({postData, navigation}) => {
             return seconds + " seconds ago"
         }
     }
+    const navigateToProfile = () => {
+        if (postData.owner === _id) {
+            navigation.navigate('UserProfile')
+        } else {
+            setOtherProfileId(postData.owner)
+        }
+    }
     return (
         <View style={styles.postContainer}>
             <View style={styles.nameTimeContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate('Profile', {profileId: postData.owner})}>
+                <TouchableOpacity onPress={navigateToProfile}>
                     <Text>{postData.owner === _id ? "Me" : postData.user.firstName + " " + postData.user.lastName}</Text>
                 </TouchableOpacity>
                 <Text> · </Text>

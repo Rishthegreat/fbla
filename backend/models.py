@@ -168,7 +168,6 @@ class Query(graphene.ObjectType):
             regex_pattern = f'.*{searchTerm}.*'
             posts = postsCollection.find({
                 "$or": [
-                    {"content": {"$regex": regex_pattern, "$options": "i"}},
                     {"title": {"$regex": regex_pattern, "$options": "i"}}
                 ]
             })

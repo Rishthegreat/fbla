@@ -9,9 +9,11 @@ import {designChoices} from "../../GlobalConsts";
 import {useLazyQuery, useQuery} from "@apollo/client";
 import {GET_POSTS} from "../graphql";
 import {Post, TopNav} from "../components";
+import {ProfileProvider} from "../contexes/ProfileContext";
 
 
 export const Homepage = ({navigation}) => {
+
     const {setCurrentTab, _id} = useContext(AuthContext)
     const [page, setPage] = useState(null)
     const [posts, setPosts] = useState([])
@@ -64,7 +66,6 @@ const styles = StyleSheet.create({
     topNav: {
         zIndex: 1,
         height: 60.5,
-        overflow: "hidden",
         position: "absolute",
         width: "100%"
     }

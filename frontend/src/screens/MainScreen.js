@@ -2,11 +2,12 @@
 import {View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView} from 'react-native';
 import {useContext} from "react";
 import {AuthContext} from "../contexes/auth-context";
-import {BottomNav, TopNav} from "../components";
+import {BottomNav, OtherProfile, TopNav} from "../components";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import {Profile, Homepage, AppSettings, MakePost} from "../screens";
+import {Homepage, AppSettings, MakePost, UserProfile} from "../screens";
 import {CustomButton} from "../components";
 import {designChoices} from "../../GlobalConsts";
+import {ProfileContext} from "../contexes/ProfileContext";
 
 const Welcome = ({navigation}) => {
     return (
@@ -26,13 +27,19 @@ const Welcome = ({navigation}) => {
 const TabsStack = createNativeStackNavigator()
 const MainApp = ({navigation}) => {
     const {userToken, login, logout} = useContext(AuthContext)
+    const {otherProfileId} = useContext(ProfileContext)
     return (
         <View style={styles.bigContainer}>
+            {otherProfileId &&
+                <View style={{zIndex: 99}}>
+                    <OtherProfile profileId={otherProfileId} />
+                </View>
+            }
             <KeyboardAvoidingView behavior={'height'} style={styles.root}>
                     <TabsStack.Navigator initialRouteName='Homepage'>
                         <TabsStack.Screen name='Homepage' options={{headerShown: false}} component={Homepage}/>
                         <TabsStack.Screen name='AppSettings' options={{headerShown: false}} component={AppSettings}/>
-                        <TabsStack.Screen name='Profile' options={{headerShown: false}} component={Profile}/>
+                        <TabsStack.Screen name='UserProfile' options={{headerShown: false}} component={UserProfile}/>
                         <TabsStack.Screen name={'MakePost'} options={{headerShown: false}} component={MakePost} />
                     </TabsStack.Navigator>
             </KeyboardAvoidingView>

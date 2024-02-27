@@ -12,7 +12,8 @@ import {AlertPopup} from "./src/components";
 import {setContext} from "@apollo/client/link/context";
 import {MMKV} from "react-native-mmkv";
 import {useAlert} from "./src/hooks/useAlert";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import {ProfileContext, ProfileProvider} from "./src/contexes/ProfileContext";
 
 const storage = new MMKV()
 const Stack = createNativeStackNavigator()
@@ -40,16 +41,18 @@ export const App = () => {
         <AlertProvider>
             <ApolloProvider client={client}>
                 <AuthProvider>
-                    <NavigationContainer style={styles.root}>
-                        <Stack.Navigator initialRouteName={MainScreen}>
-                            <Stack.Screen name='MainScreen' options={{headerShown: false}} component={MainScreen}/>
-                            <Stack.Screen name='Login' options={{headerShown: false}} component={Login}/>
-                            <Stack.Screen name='Signup' options={{headerShown: false}} component={Signup}/>
-                        </Stack.Navigator>
-                    </NavigationContainer>
-                    <View style={styles.alert_container}>
-                        <AlertPopup />
-                    </View>
+                    <ProfileProvider>
+                        <NavigationContainer style={styles.root}>
+                            <Stack.Navigator initialRouteName={MainScreen}>
+                                <Stack.Screen name='MainScreen' options={{headerShown: false}} component={MainScreen}/>
+                                <Stack.Screen name='Login' options={{headerShown: false}} component={Login}/>
+                                <Stack.Screen name='Signup' options={{headerShown: false}} component={Signup}/>
+                            </Stack.Navigator>
+                        </NavigationContainer>
+                        <View style={styles.alert_container}>
+                            <AlertPopup />
+                        </View>
+                    </ProfileProvider>
                 </AuthProvider>
             </ApolloProvider>
         </AlertProvider>
