@@ -8,13 +8,15 @@ import {AuthContext} from "../contexes/auth-context";
 import Logo from '../../assets/images/Logo.png'
 import {useLazyQuery} from "@apollo/client";
 import {SEARCH} from "../graphql";
+import {ProfileContext} from "../contexes/ProfileContext";
 
 const UserSearchResult = ({user}) => {
+    const {setOtherProfileId} = useContext(ProfileContext)
     return (
         <View style={stylesTopNav.userSearchContainer}>
             <Icon name={'user'} size={15} color={designChoices.almostBlack} />
             <Text>{user.firstName} {user.lastName}</Text>
-            <TouchableOpacity style={{display: "flex", flexDirection: "row", gap: 5, marginLeft: "auto", alignItems: "center"}}>
+            <TouchableOpacity onPress={() => setOtherProfileId(user._id)} style={{display: "flex", flexDirection: "row", gap: 5, marginLeft: "auto", alignItems: "center"}}>
                 <Text style={{color: designChoices.secondary}}>View Profile</Text>
                 <Icon name={'arrowright'} color={designChoices.secondary} size={15} />
             </TouchableOpacity>

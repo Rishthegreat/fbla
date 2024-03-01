@@ -11,10 +11,12 @@ export const Post = ({postData, navigation}) => {
     const [height, setHeight] = useState(0)
     const pictureLink = getPictureLink + "/" + postData.image
     const regularSize = 200
-    Image.getSize(pictureLink, (width, height) => {
-        setWidth(width)
-        setHeight(height)
-    })
+    if (postData.image) {
+        Image.getSize(pictureLink, (width, height) => {
+            setWidth(width)
+            setHeight(height)
+        })
+    }
     const returnWidth = () => {
         if (!width || !height) {
             return regularSize

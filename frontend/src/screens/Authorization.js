@@ -34,7 +34,7 @@ export const Login = ({navigation}) => {
             <Image source={Logo} style={styles.logo} resizeMode={'contain'}/>
             <CustomInput value={email} setValue={setEmail} placeholder={'Email'}/>
             <CustomInput value={password} setValue={setPassword} placeholder={'Password'} secureTextEntry={true}/>
-            <CustomButton onPress={login_user} text={'Log In'}/>
+            <CustomButton type={'secondary'} onPress={login_user} text={'Log In'}/>
             <Text>Don't have an account yet? <Text onPress={() => navigation.navigate('Signup')}>Signup</Text></Text>
         </View>
     )
