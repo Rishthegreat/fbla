@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, Image, TouchableOpacity} from "react-native";
-import {designChoices, getPictureLink} from "../../GlobalConsts";
+import {designChoices, getPictureLink, timestampToTimeAgo} from "../../GlobalConsts";
 import {useContext, useState} from "react";
 import {AuthContext} from "../contexes/auth-context";
 import {ProfileContext} from "../contexes/ProfileContext";
@@ -48,33 +48,6 @@ export const Post = ({postData, navigation}) => {
             return regularSize / aspectRatio
         }
     }
-    const timestampToTimeAgo = (timestamp) => {
-        const time = new Date(timestamp)
-        const now = new Date()
-        const diff = now - time
-        const seconds = Math.floor(diff / 1000)
-        const minutes = Math.floor(seconds / 60)
-        const hours = Math.floor(minutes / 60)
-        const days = Math.floor(hours / 24)
-        const weeks = Math.floor(days / 7)
-        const months = Math.floor(weeks / 4)
-        const years = Math.floor(months / 12)
-        if (years > 0) {
-            return years + " years ago"
-        } else if (months > 0) {
-            return months + " months ago"
-        } else if (weeks > 0) {
-            return weeks + " weeks ago"
-        } else if (days > 0) {
-            return days + " days ago"
-        } else if (hours > 0) {
-            return hours + " hours ago"
-        } else if (minutes > 0) {
-            return minutes + " minutes ago"
-        } else {
-            return seconds + " seconds ago"
-        }
-    }
     const navigateToProfile = () => {
         if (postData.owner === _id) {
             navigation.navigate('UserProfile')
@@ -88,7 +61,7 @@ export const Post = ({postData, navigation}) => {
                 <TouchableOpacity onPress={navigateToProfile}>
                     <Text>{postData.owner === _id ? "Me" : postData.user.firstName + " " + postData.user.lastName}</Text>
                 </TouchableOpacity>
-                <Text> · </Text>
+                <Text>·</Text>
                 <Text>{timestampToTimeAgo(postData.timestamp)}</Text>
             </View>
             <Text style={styles.title}>{postData.title}</Text>
@@ -105,7 +78,7 @@ const styles = StyleSheet.create({
     postContainer: {
         backgroundColor: designChoices.offWhite,
         padding: 12,
-        marginVertical: 10,
+        marginVertical: 6,
         borderRadius: 3
     },
     title: {
@@ -119,6 +92,7 @@ const styles = StyleSheet.create({
     },
     nameTimeContainer: {
         display: "flex",
-        flexDirection: "row"
+        flexDirection: "row",
+        gap: 5
     }
 })

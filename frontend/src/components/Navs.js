@@ -2,13 +2,14 @@
 import {Image, StyleSheet, TouchableOpacity, View, Text, TextInput, Keyboard, Animated} from "react-native";
 import {IconWithText} from "../components";
 import Icon from "react-native-vector-icons/AntDesign";
-import {designChoices} from "../../GlobalConsts";
+import {designChoices, timestampToTimeAgo} from "../../GlobalConsts";
 import {useContext, useEffect, useRef, useState} from "react";
 import {AuthContext} from "../contexes/auth-context";
 import Logo from '../../assets/images/Logo.png'
 import {useLazyQuery} from "@apollo/client";
 import {SEARCH} from "../graphql";
 import {ProfileContext} from "../contexes/ProfileContext";
+import {Shadow} from "react-native-shadow-2";
 
 const UserSearchResult = ({user}) => {
     const {setOtherProfileId} = useContext(ProfileContext)
@@ -26,9 +27,16 @@ const UserSearchResult = ({user}) => {
 
 
 const PostSearchResult = ({post}) => {
+    useEffect(() => {
+        console.log(post)
+    }, []);
     return (
-        <View>
+        <View style={stylesTopNav.postSearchContainer}>
             <Text>{post.title}</Text>
+            <Text>·</Text>
+            <Text>{post.user?.firstName} {post.user?.lastName}</Text>
+            <Text>·</Text>
+            <Text>{timestampToTimeAgo(post.timestamp)}</Text>
         </View>
     )
 }
@@ -59,24 +67,27 @@ const ResultView = ({visibility, searchResults}) => {
         }
     }, [visibility])
     return (
-        <Animated.View ref={animatedViewRef} style={{...stylesTopNav.resultView, opacity: fadeAnim}}>
-            <View>
-                <Text style={stylesTopNav.resultTitleText}>People</Text>
-                {searchResults.users?.length > 0 ?
-                    searchResults.users.map((user, key) => (
-                        <UserSearchResult user={user} key={key} />
-                    )) :
-                    <Text>No Users Found</Text>
-                }
-            </View>
-            <View>
-                <Text style={stylesTopNav.resultTitleText}>Posts</Text>
-                {searchResults.posts?.length > 0 ?
-                    searchResults.posts.map((post, key) => (
-                        <PostSearchResult post={post} key={key} />
-                    )) :
-                    <Text>No Posts Found</Text>
-                }
+        <Animated.View ref={animatedViewRef} style={{...stylesTopNav.resultContainer, opacity: fadeAnim}}>
+            <Shadow startColor={"rgba(0,0,0,0.4)"} containerStyle={{position: "absolute", bottom: 0, width: "100%"}} style={stylesTopNav.shadowDiv} distance={15} offset={[0, -7]}></Shadow>
+            <View style={stylesTopNav.resultView}>
+                <View>
+                    <Text style={stylesTopNav.resultTitleText}>People</Text>
+                    {searchResults.users?.length > 0 ?
+                        searchResults.users.map((user, key) => (
+                            <UserSearchResult user={user} key={key} />
+                        )) :
+                        <Text>No Users Found</Text>
+                    }
+                </View>
+                <View>
+                    <Text style={stylesTopNav.resultTitleText}>Posts</Text>
+                    {searchResults.posts?.length > 0 ?
+                        searchResults.posts.map((post, key) => (
+                            <PostSearchResult post={post} key={key} />
+                        )) :
+                        <Text>No Posts Found</Text>
+                    }
+                </View>
             </View>
         </Animated.View>
     )
@@ -110,7 +121,7 @@ export const TopNav = () => {
     const searchDataBaseAndUpdateText = (value) => {
         setSearchText(value)
         if (value !== null && value !== "") {
-            searchQuery({variables: {_id: _id, searchTerm: value, filters: null}})
+            searchQuery({variables: {_id: _id, searchTerm: value, filters: null}, fetchPolicy: "network-only"})
                 .then(r => {
                     console.log(r.data.search)
                     setSearchResults(prevState => {
@@ -164,16 +175,20 @@ const stylesTopNav = StyleSheet.create({
         height: 40
     },
     resultView: {
-        position: "absolute",
         width: "100%",
         paddingHorizontal: 20,
         paddingVertical: 10,
         backgroundColor: designChoices.white,
-        borderBottomWidth: 0.5,
-        borderStyle: "solid",
-        borderBottomColor: "gray",
+    },
+    resultContainer: {
+        position: "absolute",
+        width: "100%",
+        display: "none",
         top: 60.5,
-        display: "none"
+    },
+    shadowDiv: {
+        width: "100%",
+        height: 10,
     },
     resultTitleText: {
         fontSize: 20,
@@ -187,7 +202,19 @@ const stylesTopNav = StyleSheet.create({
         gap: 5,
         backgroundColor: designChoices.offWhite,
         padding: 7,
-        borderRadius: 3
+        borderRadius: 3,
+        marginVertical: 5
+    },
+    postSearchContainer: {
+        display: "flex",
+        flexDirection: "row",
+        gap: 5,
+        alignItems: "center",
+        backgroundColor: designChoices.offWhite,
+        padding: 7,
+        borderRadius: 3,
+        marginVertical: 5,
+        flexWrap: "wrap"
     }
 })
 

@@ -178,7 +178,11 @@ class Query(graphene.ObjectType):
                     {"profile.school.name": {"$regex": regex_pattern, "$options": "i"}}
                 ]
             })
-            return SearchObject(posts=posts, users=users)
+            postsToSearch = list(posts)
+            for i in range(0, len(postsToSearch)):
+                user = usersCollection.find_one({"_id": ObjectId(postsToSearch[i]["owner"])})
+                postsToSearch[i]["user"] = User(**user)
+            return SearchObject(posts=postsToSearch, users=users)
         return None
 
 

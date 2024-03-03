@@ -6,14 +6,13 @@ import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {AuthProvider} from "./src/contexes/auth-context";
 import {ApolloClient, InMemoryCache, ApolloProvider, createHttpLink} from '@apollo/client';
-import {backendLink, designChoices} from "./GlobalConsts";
+import {backendLink} from "./GlobalConsts";
 import {AlertProvider} from "./src/contexes/AlertContext";
 import {AlertPopup} from "./src/components";
 import {setContext} from "@apollo/client/link/context";
 import {MMKV} from "react-native-mmkv";
-import {useAlert} from "./src/hooks/useAlert";
-import {useContext, useEffect, useState} from "react";
-import {ProfileContext, ProfileProvider} from "./src/contexes/ProfileContext";
+import {ProfileProvider} from "./src/contexes/ProfileContext";
+import {LogBox} from "react-native";
 
 const storage = new MMKV()
 const Stack = createNativeStackNavigator()
@@ -37,6 +36,7 @@ const client = new ApolloClient({
 })
 
 export const App = () => {
+    LogBox.ignoreAllLogs()
     return (
         <AlertProvider>
             <ApolloProvider client={client}>

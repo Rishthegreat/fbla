@@ -29,7 +29,7 @@ export const Profile = ({profileId, selfProfile}) => {
     const [addSection, setAddSection] = useState(false)
     const [editSectionType, setEditSectionType] = useState(null)
     const {data, error, loading, refetch} = useQuery(WHOLE_USER_BY_ID, {
-        variables: {_id: profileId}, pollInterval: 10000
+        variables: {_id: profileId}, pollInterval: 10000, fetchPolicy: "network-only"
     })
 
     useEffect(() => {
@@ -48,7 +48,9 @@ export const Profile = ({profileId, selfProfile}) => {
                 {profileUser &&
                     <View>
                         <View style={{marginTop: 10}}>{/* User Information */}
-                            <View></View>{/* Picture */}
+                            <View style={{backgroundColor: "#cecdcd", alignSelf: "flex-start", borderRadius: 55, padding: 5, marginVertical: 5}}>
+                                <Icon name={'user'} size={50} />
+                            </View>{/* Picture */}
                             <Text>{profileUser.firstName} {profileUser.lastName}</Text>
                             {profileUser.profile?.school && <Text>Student at {profileUser.profile.school.name}</Text>}
                             <Text>Contact: {profileUser.email}</Text>
@@ -67,9 +69,9 @@ export const Profile = ({profileId, selfProfile}) => {
                             <ProfileView selfProfile={selfProfile} sectionType='classes' setEditSectionType={setEditSectionType}>{/* Classes taken in school */}
                                 <Text style={styles.sectionHeader}>Classes I am Currently Taking</Text>
                                 {
-                                    profileUser.profile.classes.map(value => {
+                                    profileUser.profile.classes.map((value, i) => {
                                         return (
-                                            <View>
+                                            <View style={{...styles.sectionChild, ...(i === profileUser.profile.classes.length -1)? {paddingBottom: 0, borderBottomWidth: 0, marginBottom: 0} : null}}>
                                                 <Text>{value.name}</Text>
                                             </View>
                                         )
@@ -81,9 +83,9 @@ export const Profile = ({profileId, selfProfile}) => {
                             <ProfileView selfProfile={selfProfile} sectionType='colleges' setEditSectionType={setEditSectionType}>{/* colleges I am interested in */}
                                 <Text style={styles.sectionHeader}>Colleges I am Interested in</Text>
                                 {
-                                    profileUser.profile.colleges.map(value => {
+                                    profileUser.profile.colleges.map((value, i) => {
                                         return (
-                                            <View>
+                                            <View style={{...styles.sectionChild, ...(i === profileUser.profile.colleges.length -1)? {paddingBottom: 0, borderBottomWidth: 0, marginBottom: 0} : null}}>
                                                 <Text>{value.name}</Text>
                                             </View>
                                         )
@@ -95,9 +97,9 @@ export const Profile = ({profileId, selfProfile}) => {
                             <ProfileView selfProfile={selfProfile} sectionType='clubs' setEditSectionType={setEditSectionType}>
                                 <Text style={styles.sectionHeader}>Clubs I Participate In</Text>
                                 {
-                                    profileUser.profile.clubs.map(value => {
+                                    profileUser.profile.clubs.map((value, i) => {
                                         return (
-                                            <View>
+                                            <View style={{...styles.sectionChild, ...(i === profileUser.profile.clubs.length -1)? {paddingBottom: 0, borderBottomWidth: 0, marginBottom: 0} : null}}>
                                                 <Text style={styles.subsectionHeader}>{value.position}</Text>
                                                 <Text>{value.name}</Text>
                                                 <Text>{value.description}</Text>
@@ -112,9 +114,9 @@ export const Profile = ({profileId, selfProfile}) => {
                             <ProfileView selfProfile={selfProfile} sectionType='jobsInternships' setEditSectionType={setEditSectionType}>
                                 <Text style={styles.sectionHeader}>Jobs and Internships</Text>
                                 {
-                                    profileUser.profile.jobsInternships.map(value => {
+                                    profileUser.profile.jobsInternships.map((value, i) => {
                                         return (
-                                            <View>
+                                            <View style={{...styles.sectionChild, ...(i === profileUser.profile.jobsInternships.length -1)? {paddingBottom: 0, borderBottomWidth: 0, marginBottom: 0} : null}}>
                                                 <Text>{value.position}</Text>
                                                 <Text>{value.company}</Text>
                                                 <Text>{value.description}</Text>
@@ -129,9 +131,9 @@ export const Profile = ({profileId, selfProfile}) => {
                             <ProfileView selfProfile={selfProfile} sectionType='communityServices' setEditSectionType={setEditSectionType}>
                                 <Text style={styles.sectionHeader}>Community Service</Text>
                                 {
-                                    profileUser.profile.communityServices.map(value => {
+                                    profileUser.profile.communityServices.map((value, i) => {
                                         return (
-                                            <View>
+                                            <View style={{...styles.sectionChild, ...(i === profileUser.profile.communityServices.length -1)? {paddingBottom: 0, borderBottomWidth: 0, marginBottom: 0} : null}}>
                                                 <Text>{value.position}</Text>
                                                 <Text>{value.organization}</Text>
                                                 <Text>{value.hours}</Text>
@@ -147,9 +149,9 @@ export const Profile = ({profileId, selfProfile}) => {
                             <ProfileView selfProfile={selfProfile} sectionType='awards' setEditSectionType={setEditSectionType}>
                                 <Text style={styles.sectionHeader}>Awards</Text>
                                 {
-                                    profileUser.profile.awards.map(value => {
+                                    profileUser.profile.awards.map((value, i) => {
                                         return (
-                                            <View>
+                                            <View style={{...styles.sectionChild, ...(i === profileUser.profile.awards.length -1)? {paddingBottom: 0, borderBottomWidth: 0, marginBottom: 0} : null}}>
                                                 <Text>{value.name}</Text>
                                                 <Text>{value.organization}</Text>
                                                 <Text>{value.description}</Text>
@@ -164,9 +166,9 @@ export const Profile = ({profileId, selfProfile}) => {
                             <ProfileView selfProfile={selfProfile} sectionType='tests' setEditSectionType={setEditSectionType}>
                                 <Text style={styles.sectionHeader}>Tests I have Taken</Text>
                                 {
-                                    profileUser.profile.tests.map(value => {
+                                    profileUser.profile.tests.map((value, i) => {
                                         return (
-                                            <View>
+                                            <View style={{...styles.sectionChild, ...(i === profileUser.profile.tests.length -1)? {paddingBottom: 0, borderBottomWidth: 0, marginBottom: 0} : null}}>
                                                 <Text style={styles.subsectionHeader}>{value.name}</Text>
                                                 <Text>Score: {value.score}</Text>
                                             </View>
@@ -180,9 +182,9 @@ export const Profile = ({profileId, selfProfile}) => {
                             <ProfileView selfProfile={selfProfile} sectionType='activities' setEditSectionType={setEditSectionType}>
                                 <Text style={styles.sectionHeader}>Other Activities</Text>
                                 {
-                                    profileUser.profile.activities.map(value => {
+                                    profileUser.profile.activities.map((value, i) => {
                                         return (
-                                            <View>
+                                            <View style={{...styles.sectionChild, ...(i === profileUser.profile.activities.length -1)? {paddingBottom: 0, borderBottomWidth: 0, marginBottom: 0} : null}}>
                                                 <Text>{value.name}</Text>
                                                 <Text>{value.description}</Text>
                                             </View>
@@ -215,7 +217,7 @@ const styles = StyleSheet.create({
     sectionHeader: {
         fontSize: 18,
         fontWeight: "bold",
-        marginBottom: 10
+        marginBottom: 10,
     },
     editIcon: {
         position: "absolute",
@@ -224,6 +226,15 @@ const styles = StyleSheet.create({
     },
     subsectionHeader: {
         fontWeight: "bold",
-        fontSize: 16
+        fontSize: 16,
+    },
+    sectionChild: {
+        marginVertical: 2.5,
+        display: "flex",
+        flexDirection: "column",
+        borderStyle: "solid",
+        borderBottomWidth: 0.5,
+        borderBottomColor: "gray",
+        paddingBottom: 5
     }
 })

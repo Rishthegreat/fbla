@@ -83,6 +83,11 @@ export const SEARCH = gql`
                 _id
                 title
                 content
+                timestamp
+                user {
+                    firstName
+                    lastName
+                }
             }
             users {
                 _id
