@@ -18,7 +18,8 @@ export const Homepage = ({navigation}) => {
     const [page, setPage] = useState(null)
     const [posts, setPosts] = useState([])
     const {data, error, loading, refetch} = useQuery(GET_POSTS, {variables: {_id: _id, page: page}, onError: (e) => console.log(JSON.stringify(e, null, 2)), fetchPolicy: 'network-only'})
-    useFocusEffect ( // Run each time the tab is loaded
+    // Run each time the tab is loaded
+    useFocusEffect (
         useCallback(() => {
             setCurrentTab('Homepage')
             refetch()
@@ -40,7 +41,7 @@ export const Homepage = ({navigation}) => {
         }
     }, [data]);
     return (
-        <View>
+        <View style={{minHeight: "100%"}}>
             <View style={styles.topNav}>
                 <TopNav />
             </View>

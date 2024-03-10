@@ -72,3 +72,19 @@ export const CREATE_POST = gql`
         }
     }
 `
+
+export const CREATE_BUG_REPORT = gql`
+    mutation CreateBugReport($owner: String!, $title: String!, $description: String!) {
+        createBugReport(
+            bugReportData: {
+                owner: $owner,
+                title: $title,
+                description: $description
+            }
+        ) 
+        {
+            success
+            message
+        }
+    }
+`

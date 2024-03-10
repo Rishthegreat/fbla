@@ -8,6 +8,7 @@ import {AuthContext} from "../contexes/auth-context";
 import {CustomInput} from "./CustomInput";
 import {CustomButton} from "./CustomButton";
 import {AlertContext} from "../contexes/AlertContext";
+import {PopupModal} from "./PopupModal";
 
 const Property = ({setProfileUserTemp, itemKey, item, editSectionType}) => {
     const updateItem = (value) => {
@@ -117,60 +118,29 @@ export const ProfileEditSectionView = ({profileUser, editSectionType, setEditSec
             })
     }
     return (
-        <Modal animationType={'fade'} transparent={true}>
-            <View style={styles.modal}>
-                <View style={styles.container}>
-                    <TouchableOpacity style={styles.closeContainer} onPress={() => setEditSectionType(null)}>
-                        <Icon name={'close'} size={20} color={designChoices.almostBlack} />
-                    </TouchableOpacity>
-                    <ScrollView showsVerticalScrollIndicator={false} style={{height: '90%'}} contentContainerStyle={{flexGrow: 1, backgroundColor: 'transparent'}}>
-                        <Text style={styles.headerText}>{editSectionType[0].toLocaleUpperCase()+editSectionType.slice(1, editSectionType.length)}</Text>
-                        <CustomButton text='Delete Entire Section' onPress={deleteSection} />
-                        <View style={styles.listContainer}>
-                            {
-                                profileUserTemp.profile?.[editSectionType].map(item => {
-                                    return (
-                                        <ListItem refetch={refetch} editSectionType={editSectionType} item={item} profileUserTemp={profileUserTemp} setProfileUserTemp={setProfileUserTemp} />
-                                    )
-                                })
-                            }
-                        </View>
-                        <View style={styles.bottomBtnContainer}>
-                            <CustomButton text='Add Item' style={styles.bottomBtn} onPress={addItem}/>
-                            <CustomButton text='Save' style={styles.bottomBtn} onPress={save} />
-                        </View>
-                    </ScrollView>
+        <PopupModal onClose={() => setEditSectionType(null)}>
+            <ScrollView showsVerticalScrollIndicator={false} style={{height: '90%'}} contentContainerStyle={{flexGrow: 1, backgroundColor: 'transparent'}}>
+                <Text style={styles.headerText}>{editSectionType[0].toLocaleUpperCase()+editSectionType.slice(1, editSectionType.length)}</Text>
+                <CustomButton text='Delete Entire Section' onPress={deleteSection} />
+                <View style={styles.listContainer}>
+                    {
+                        profileUserTemp.profile?.[editSectionType].map(item => {
+                            return (
+                                <ListItem refetch={refetch} editSectionType={editSectionType} item={item} profileUserTemp={profileUserTemp} setProfileUserTemp={setProfileUserTemp} />
+                            )
+                        })
+                    }
                 </View>
-            </View>
-        </Modal>
+                <View style={styles.bottomBtnContainer}>
+                    <CustomButton text='Add Item' style={styles.bottomBtn} onPress={addItem}/>
+                    <CustomButton text='Save' style={styles.bottomBtn} onPress={save} />
+                </View>
+            </ScrollView>
+        </PopupModal>
     )
 }
 
 const styles = StyleSheet.create({
-    modal: {
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        width: '100%',
-        height: '100%',
-        display: "flex",
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: "relative",
-    },
-    container: {
-        padding: 25,
-        backgroundColor: designChoices.white,
-        borderRadius: 3,
-        overflowY: "scroll",
-        minHeight: '90%',
-        width: '90%',
-        position: 'relative'
-    },
-    closeContainer: {
-        width: 20,
-        position: "absolute",
-        top: 8,
-        right: 8
-    },
     listContainer: {
 
     },

@@ -1,8 +1,9 @@
 import {View, Text, StyleSheet, Image, TouchableOpacity} from "react-native";
 import {designChoices, getPictureLink, timestampToTimeAgo} from "../../GlobalConsts";
-import {useContext, useState} from "react";
+import {useContext, useRef, useState} from "react";
 import {AuthContext} from "../contexes/auth-context";
 import {ProfileContext} from "../contexes/ProfileContext";
+import Icon from "react-native-vector-icons/AntDesign";
 
 export const Post = ({postData, navigation}) => {
     const {_id} = useContext(AuthContext)
@@ -11,6 +12,7 @@ export const Post = ({postData, navigation}) => {
     const [height, setHeight] = useState(0)
     const pictureLink = getPictureLink + "/" + postData.image
     const regularSize = 200
+    const postRef = useRef(null)
     if (postData.image) {
         Image.getSize(pictureLink, (width, height) => {
             setWidth(width)
@@ -55,8 +57,9 @@ export const Post = ({postData, navigation}) => {
             setOtherProfileId(postData.owner)
         }
     }
+
     return (
-        <View style={styles.postContainer}>
+        <View style={styles.postContainer} ref={postRef}>
             <View style={styles.nameTimeContainer}>
                 <TouchableOpacity onPress={navigateToProfile}>
                     <Text>{postData.owner === _id ? "Me" : postData.user.firstName + " " + postData.user.lastName}</Text>
@@ -70,6 +73,10 @@ export const Post = ({postData, navigation}) => {
                 postData.image &&
                 <Image resizeMethod={"resize"} resizeMode="contain" source={{uri: pictureLink}} style={{...styles.image, width: returnWidth(), height: returnHeight()}} />
             }
+            <TouchableOpacity style={styles.shareContainer}>
+                <Text>Share</Text>
+                <Icon name={'sharealt'} size={15} />
+            </TouchableOpacity>
         </View>
     )
 }
@@ -94,5 +101,11 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         gap: 5
+    },
+    shareContainer: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 5,
     }
 })

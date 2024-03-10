@@ -97,3 +97,21 @@ class PostInputType(graphene.InputObjectType):
 class SearchObject(graphene.ObjectType):
     posts = graphene.List(Post)
     users = graphene.List(User)
+
+
+class BugReport(graphene.ObjectType):
+    _id = graphene.String(name='_id', required=True)
+    title = graphene.String(required=True)
+    description = graphene.String(required=True)
+    owner = graphene.String(required=True)
+    timestamp = graphene.DateTime(required=True)
+
+class BugReportInputType(graphene.InputObjectType):
+    title = graphene.String(required=True)
+    description = graphene.String(required=True)
+    owner = graphene.String(required=True)
+
+
+class CollegeView(graphene.ObjectType):
+    name = graphene.String(required=True)
+    website = graphene.String()

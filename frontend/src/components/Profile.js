@@ -41,7 +41,7 @@ export const Profile = ({profileId, selfProfile}) => {
                 setNewProfile(true)
             }
         }
-    }, [data, error, loading]);
+    }, [data, error, loading])
     return (
         <View style={{paddingHorizontal: 20, width: "100%", backgroundColor: designChoices.white, flexGrow: 1}}>
             <ScrollView showsVerticalScrollIndicator={false} style={{backgroundColor: designChoices.white}}>

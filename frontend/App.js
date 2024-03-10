@@ -37,7 +37,7 @@ const client = new ApolloClient({
 })
 
 export const App = () => {
-    LogBox.ignoreAllLogs()
+    //LogBox.ignoreAllLogs()
     let oldRender = Text.render;
     Text.render = function (...args) {
         let origin = oldRender.call(this, ...args);

@@ -225,7 +225,7 @@ export const BottomNav = ({navigation}) => {
         {navigateTo: 'MakePost', text: 'Post', icon: 'plus'},
         {navigateTo: 'UserProfile', text: 'Profile', icon: 'user'},
         {navigateTo: 'AppSettings', text: 'Settings', icon: 'setting'},
-        {navigateTo: 'Colleges', text: 'Colleges', icon: 'book'}
+        //{navigateTo: 'Colleges', text: 'Colleges', icon: 'book'}
     ]
     return (
         <View style={styles.bottom_nav_big_container}>
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
         borderTopWidth: 0.5
     },
     tab_container : {
-        flexBasis: '20%',
+        flexBasis: '25%',
         paddingBottom: 7,
         paddingTop: 10
     }

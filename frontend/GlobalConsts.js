@@ -1,9 +1,10 @@
 /* eslint-disable */
 
 export const designChoices = {
-    primary: '#f0a53f',
-    secondary: '#35c0c3',
-    tertiary: '#262666',
+    primary: '#D4633B',
+    secondary: '#194F6C',
+    tertiary: '#9E4AAB',
+    fourtiary: '#E7C550',
     offWhite: '#f3e5d4',
     white: '#fcfaf7',
     almostGrey: '#00214d',

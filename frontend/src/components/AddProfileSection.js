@@ -3,8 +3,7 @@
 import {View, Text, TouchableOpacity, Modal, StyleSheet, KeyboardAvoidingView, Keyboard} from "react-native";
 import React, {useCallback, useContext, useState} from "react";
 import {useFocusEffect} from "@react-navigation/native";
-import {CustomDropdown, CustomInput, CustomButton} from "../components";
-import Icon from "react-native-vector-icons/AntDesign";
+import {CustomDropdown, CustomInput, CustomButton, PopupModal} from "../components";
 import {designChoices, profileSectionsSchema} from "../../GlobalConsts";
 import {useMutation} from "@apollo/client";
 import {UPDATE_PROFILE} from "../graphql";
@@ -59,49 +58,19 @@ export const AddProfileSection = ({profileUser, setAddSection, refetch}) => {
             })
     }
     return (
-        <Modal animationType={'fade'} transparent={true}>
-            <View style={styles.modal}>
-                <View style={styles.container}>
-                    <TouchableOpacity style={styles.closeContainer} onPress={() => setAddSection(false)}>
-                        <Icon name={'close'} size={20} color={designChoices.almostBlack} />
-                    </TouchableOpacity>
-                    <Text style={{...styles.questionText, color: designChoices.error}}>If the section chosen has no information, it will be added to your profile</Text>
-                    <Text style={styles.questionText}>Choose which section to add information to</Text>
-                    <CustomDropdown placeholder='Select Item...' data={profileSectionsLeft} value={profileSectionType?.value} onChange={onSelectItem} />
-                    <View style={{marginVertical: 15}}>{additionalQuestions}</View>{/* Dynamically updating inputs */}
-                    {additionalQuestions &&
-                        <CustomButton text={'Add'} onPress={submitAddSection} />
-                    }
-                </View>
-            </View>
-        </Modal>
+        <PopupModal onClose={() => setAddSection(false)}>
+            <Text style={{...styles.questionText, color: designChoices.error}}>If the section chosen has no information, it will be added to your profile</Text>
+            <Text style={styles.questionText}>Choose which section to add information to</Text>
+            <CustomDropdown placeholder='Select Item...' data={profileSectionsLeft} value={profileSectionType?.value} onChange={onSelectItem} />
+            <View style={{marginVertical: 15}}>{additionalQuestions}</View>{/* Dynamically updating inputs */}
+            {additionalQuestions &&
+                <CustomButton text={'Add'} onPress={submitAddSection} />
+            }
+        </PopupModal>
     )
 }
 
 const styles = StyleSheet.create({
-    modal: {
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        width: '100%',
-        height: '100%',
-        display: "flex",
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: "relative",
-    },
-    container: {
-        padding: 25,
-        backgroundColor: designChoices.white,
-        borderRadius: 3,
-        overflowY: "scroll",
-        minHeight: '90%',
-        width: '90%'
-    },
-    closeContainer: {
-        width: 20,
-        position: "absolute",
-        top: 10,
-        right: 10
-    },
     questionText: {
         fontSize: 17,
         marginVertical: 4

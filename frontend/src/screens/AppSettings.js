@@ -1,16 +1,19 @@
 /* eslint-disable */
 
-import {useCallback, useContext, useEffect} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 import {AuthContext} from "../contexes/auth-context";
-import {CustomButton} from "../components";
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {CustomButton, CustomInput, PopupModal} from "../components";
+import {Alert, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import TempLogo from '../../assets/images/Logo.png'
 import {useFocusEffect} from "@react-navigation/native";
 import {designChoices} from "../../GlobalConsts";
+import {CREATE_BUG_REPORT} from "../graphql";
+import {useMutation} from "@apollo/client";
+import {AlertContext} from "../contexes/AlertContext";
 
-const IndividualSetting = ({name}) => {
+const IndividualSetting = ({name, onPress}) => {
     return (
-        <TouchableOpacity style={settingStyles.individual_setting_container}>
+        <TouchableOpacity style={settingStyles.individual_setting_container} onPress={onPress}>
             <Text style={settingStyles.setting_text}>{name}</Text>
         </TouchableOpacity>
     )
@@ -26,8 +29,39 @@ const settingStyles = StyleSheet.create({
     }
 })
 
+const ReportBug = ({setReportBugModal}) => {
+    const [bugTitle, setBugTitle] = useState('')
+    const [bugDescription, setBugDescription] = useState('')
+    const [createBugMutation] = useMutation(CREATE_BUG_REPORT)
+    const {setAlert} = useContext(AlertContext)
+    const {_id} = useContext(AuthContext)
+    const submitBug = () => {
+        if (!bugTitle || !bugDescription) {
+            Alert.alert('Please fill out both fields')
+            return
+        }
+        createBugMutation({variables: {title: bugTitle, description: bugDescription, owner: _id}, onError: (e) => console.log(JSON.stringify(e, null, 2))})
+            .then(r => {
+                console.log(r)
+                setAlert('Bug Report Submitted!', 'success')
+                setReportBugModal(false)
+            })
+    }
+    return (
+        <PopupModal onClose={() => setReportBugModal(false)}>
+            <View>
+                <Text style={styles.reportBugTitle}>Report a Bug</Text>
+                <CustomInput value={bugTitle} setValue={setBugTitle} placeholder={'Bug Title'} />
+                <CustomInput value={bugDescription} setValue={setBugDescription} expandable={true} placeholder={'What went wrong?'} minHeight={300} maxHeight={500} />
+                <CustomButton text={'Submit'} onPress={submitBug} />
+            </View>
+        </PopupModal>
+    )
+}
+
 export const AppSettings = ({navigation}) => {
     const {logout, setCurrentTab} = useContext(AuthContext)
+    const [reportBugModal, setReportBugModal] = useState(false)
     useFocusEffect ( // Run each time the tab is loaded
         useCallback(() => setCurrentTab('AppSettings'), [])
     )
@@ -40,6 +74,12 @@ export const AppSettings = ({navigation}) => {
                     <IndividualSetting name='Account Settings' />
                     <IndividualSetting name='Theme' />
                     <IndividualSetting name='Visibility' />
+                    <IndividualSetting onPress={() => setReportBugModal(true)} name='Report a Bug' />
+                </View>
+                <View>
+                    {reportBugModal &&
+                        <ReportBug setReportBugModal={setReportBugModal} />
+                    }
                 </View>
                 <CustomButton text={'Log Out'} onPress={logout} />
             </View>
@@ -68,5 +108,10 @@ const styles = StyleSheet.create({
         display: "flex",
         alignItems: "flex-start",
         width: '100%'
+    },
+    reportBugTitle: {
+        fontSize: 20,
+        textAlign: "center",
+        marginBottom: 10
     }
 })

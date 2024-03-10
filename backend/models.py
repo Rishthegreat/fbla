@@ -6,7 +6,9 @@ from pymongo import MongoClient
 from bcrypt import hashpw, gensalt
 from flask_jwt_extended import create_access_token, jwt_required
 from bson.objectid import ObjectId
-from skeleton import Post, User, UserInputType, PostInputType, SearchObject
+from skeleton import Post, User, UserInputType, PostInputType, SearchObject, BugReport, BugReportInputType, CollegeView
+
+import csv
 
 client = MongoClient("mongodb://localhost:27017/")
 db = client["fbla"]
@@ -129,6 +131,19 @@ class CreatePost(graphene.Mutation):
         postsCollection.insert_one(postData)
         return CreatePost(success=True, message=None)
 
+class CreateBugReport(graphene.Mutation):
+    success = graphene.Boolean()
+    message = graphene.String()
+    class Arguments:
+        bugReportData = BugReportInputType()
+    def mutate(self, info, bugReportData):
+        bugReportData["_id"] = bson.objectid.ObjectId()
+        bugReportData["timestamp"] = datetime.datetime.now()
+        bugReportData["owner"] = ObjectId(bugReportData["owner"])
+        bugReportsCollection = db["bugReports"]
+        bugReportsCollection.insert_one(bugReportData)
+        return CreateBugReport(success=True, message=None)
+
 class Query(graphene.ObjectType):
     users = graphene.List(User)
     user = graphene.Field(User, _id=graphene.String(name='_id', required=True))
@@ -192,7 +207,7 @@ class Mutation(graphene.ObjectType):
     updateProfile = UpdateProfile.Field()
     deleteSection = DeleteSection.Field()
     updateMultipleProfile = UpdateMultipleProfile.Field()
-
+    createBugReport = CreateBugReport.Field()
     createPost = CreatePost.Field()
 
 

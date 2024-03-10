@@ -106,7 +106,7 @@ export const MakePost = ({navigation}) => {
                 </View>
                 <CustomInput minHeight={200} maxHeight={700} expandable={true} placeholder={'Start typing content...'} value={content} setValue={setContent} />
                 <CustomButton onPress={selectImage} text={image ? "Change Image" : "Upload Image"} />
-                <CustomButton type={'tertiary'} onPress={createPost} text={'Post'} style={{marginTop: "auto", marginBottom: 15}} />
+                <CustomButton type={'secondary'} onPress={createPost} text={'Post'} style={{marginTop: "auto", marginBottom: 15}} />
             </ScrollView>
         </View>
     )
