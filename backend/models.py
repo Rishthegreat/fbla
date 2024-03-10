@@ -149,10 +149,36 @@ class Query(graphene.ObjectType):
     user = graphene.Field(User, _id=graphene.String(name='_id', required=True))
     posts = graphene.List(Post, _id=graphene.String(name='_id', required=True), page=graphene.Int(required=False, default_value=None))
     search = graphene.Field(SearchObject, _id=graphene.String(name='_id', required=True), searchTerm=graphene.String(required=False, default_value=None), filters=graphene.JSONString(required=False, default_value=None))
+    collegeList = graphene.List(CollegeView, _id=graphene.String(name='_id', required=True))
     @jwt_required()
     def resolve_users(self, info):
         usersCollection = db["users"]
         return list(usersCollection.find())
+
+    def resolve_collegeList(self, info, _id):
+        usersCollection = db["users"]
+        userFound = usersCollection.find_one({"_id": ObjectId(_id)})
+        target_sat_composite = None
+        if userFound:
+            testScores = userFound["profile"]["tests"]
+            if testScores and len(testScores) > 0:
+                for test in testScores:
+                    if test["name"].upper() == "SAT":
+                        target_sat_composite = test["score"]
+                        break
+        matching_schools = []
+        if target_sat_composite is None:
+            return None
+        with open('FBLA_Scores.csv', 'r') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                sat_composite = int(row['SAT Composite'])
+                if sat_composite > target_sat_composite:
+                    matching_schools.append({'School Name': row['School Name'], 'URL': row['URL']})
+
+                    if len(matching_schools) == 5:
+                        break
+        return matching_schools
 
     @jwt_required()
     def resolve_user(self, info, _id):
