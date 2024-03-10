@@ -10,6 +10,7 @@ export const designChoices = {
     almostBlack: '#1c1c2c',
     success: '#66f6a9',
     error: '#ef6262',
+    defaultText: '#212121'
 }
 
 export const backendLink = 'http://10.0.2.2:5000/graphql' // Make sure you change this for production

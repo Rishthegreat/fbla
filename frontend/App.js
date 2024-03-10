@@ -6,13 +6,14 @@ import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {AuthProvider} from "./src/contexes/auth-context";
 import {ApolloClient, InMemoryCache, ApolloProvider, createHttpLink} from '@apollo/client';
-import {backendLink} from "./GlobalConsts";
+import {backendLink, designChoices} from "./GlobalConsts";
 import {AlertProvider} from "./src/contexes/AlertContext";
 import {AlertPopup} from "./src/components";
 import {setContext} from "@apollo/client/link/context";
 import {MMKV} from "react-native-mmkv";
 import {ProfileProvider} from "./src/contexes/ProfileContext";
 import {LogBox} from "react-native";
+import React from "react";
 
 const storage = new MMKV()
 const Stack = createNativeStackNavigator()
@@ -37,6 +38,13 @@ const client = new ApolloClient({
 
 export const App = () => {
     LogBox.ignoreAllLogs()
+    let oldRender = Text.render;
+    Text.render = function (...args) {
+        let origin = oldRender.call(this, ...args);
+        return React.cloneElement(origin, {
+            style: [{color: designChoices.defaultText, fontFamily: 'Arial'}, origin.props.style]
+        })
+    }
     return (
         <AlertProvider>
             <ApolloProvider client={client}>
