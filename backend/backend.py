@@ -5,7 +5,7 @@ from PIL import Image
 from flask import Flask, request, send_from_directory
 from flask_cors import CORS
 import models as md
-from flask_graphql import GraphQLView
+from graphql_server.flask import GraphQLView
 from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
