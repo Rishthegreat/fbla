@@ -1,11 +1,24 @@
 /* eslint-disable */
-import {StyleSheet, TextInput, View} from "react-native";
+import {Keyboard, StyleSheet, TextInput, View} from "react-native";
 import {designChoices} from "../../GlobalConsts";
+import {useEffect, useRef} from "react";
 
 export const CustomInput = ({value, setValue, placeholder, secureTextEntry, expandable, minHeight, maxHeight}) => {
-  return (
+    const textInputRef = useRef(null)
+    const keyboardHideCallback = () => {
+        textInputRef.current.blur?.()
+    }
+
+    useEffect(() => {
+        const keyboardDidHideSubscription = Keyboard.addListener('keyboardDidHide', keyboardHideCallback);
+
+        return () => {
+            keyboardDidHideSubscription?.remove();
+        };
+    }, []);
+    return (
       <View style={styles.container}>
-          <TextInput style={expandable ? {maxHeight: maxHeight ? maxHeight: 175, minHeight: minHeight ? minHeight : null, textAlignVertical: 'top'} : null} multiline={expandable} value={value} onChangeText={setValue} placeholder={placeholder} secureTextEntry={secureTextEntry}/>
+          <TextInput ref={textInputRef} style={expandable ? {maxHeight: maxHeight ? maxHeight: 175, minHeight: minHeight ? minHeight : null, textAlignVertical: 'top'} : null} multiline={expandable} value={value} onChangeText={setValue} placeholder={placeholder} secureTextEntry={secureTextEntry}/>
       </View>
   )
 }

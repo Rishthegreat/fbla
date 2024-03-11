@@ -13,12 +13,12 @@ import Svg, {Path} from "react-native-svg";
 
 const Welcome = ({navigation}) => {
     return (
-        <View style={{height: "100%"}}>
+        <View style={{height: "100%", backgroundColor: designChoices.white}}>
             <View style={styles.rootWelcome}>
                 <View style={styles.welcomeLogoTextContainer}>
                     <Image source={Logo} style={{width: 200, height: 200}}/>
                     <Text style={styles.welcomeText}>Spark Social</Text>
-                    <Text style={{...styles.welcomeText, fontSize: 16}}>Change the World</Text>
+                    <Text style={{...styles.welcomeText, fontSize: 17}}>Change the World</Text>
                 </View>
                 <Text style={{textAlign: "center", marginBottom: 10}}>Share your achievements with others and create new
                     connections with students all around the world.</Text>
