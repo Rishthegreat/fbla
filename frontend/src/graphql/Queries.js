@@ -97,3 +97,13 @@ export const SEARCH = gql`
         }
     }
 `
+
+export const GET_COLLEGE_LIST = gql`
+query GetCollegeList($_id: String!) {
+        collegeList(_id: $_id) {
+            name
+            website
+            acceptanceRate
+        }
+    }
+`

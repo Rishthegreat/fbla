@@ -118,10 +118,13 @@ export const Post = ({postData, navigation}) => {
                 postData.image &&
                 <Image resizeMethod={"resize"} resizeMode="contain" source={{uri: pictureLink}} style={{...styles.image, width: returnWidth(), height: returnHeight()}} />
             }
-            <TouchableOpacity style={styles.shareContainer} onPress={sharePost}>
-                <Icon name={'sharealt'} size={15} />
-                <Text>Share to Instagram</Text>
-            </TouchableOpacity>
+            {
+                postData.image &&
+                <TouchableOpacity style={styles.shareContainer} onPress={sharePost}>
+                    <Icon name={'sharealt'} size={15} />
+                    <Text>Share to Instagram</Text>
+                </TouchableOpacity>
+            }
         </View>
     )
 }
@@ -152,5 +155,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         gap: 5,
+        marginTop: 5
     }
 })

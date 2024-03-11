@@ -115,3 +115,4 @@ class BugReportInputType(graphene.InputObjectType):
 class CollegeView(graphene.ObjectType):
     name = graphene.String(required=True)
     website = graphene.String()
+    acceptanceRate = graphene.Float()
