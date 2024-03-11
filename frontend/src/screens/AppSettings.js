@@ -63,7 +63,7 @@ export const AppSettings = ({navigation}) => {
     const {logout, setCurrentTab} = useContext(AuthContext)
     const [reportBugModal, setReportBugModal] = useState(false)
     useFocusEffect ( // Run each time the tab is loaded
-        useCallback(() => setCurrentTab('AppSettings'), [])
+        useCallback(() => setCurrentTab('AppSettings'), [setCurrentTab])
     )
     return (
         <View style={{paddingHorizontal: 20, width: "100%", backgroundColor: designChoices.white, flexGrow: 1}}>
@@ -92,7 +92,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         height: '100%',
         width: '100%',
-        backgroundColor: designChoices.white
     },
     title: {
         fontSize: 20,

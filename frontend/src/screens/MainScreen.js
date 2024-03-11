@@ -4,7 +4,7 @@ import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../contexes/auth-context";
 import {BottomNav, OtherProfile, TopNav} from "../components";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import {Homepage, AppSettings, MakePost, UserProfile} from "../screens";
+import {Homepage, AppSettings, MakePost, UserProfile, CollegeList} from "../screens";
 import {CustomButton} from "../components";
 import {designChoices} from "../../GlobalConsts";
 import {ProfileContext} from "../contexes/ProfileContext";
@@ -53,7 +53,8 @@ const MainApp = ({navigation}) => {
                         <TabsStack.Screen name='Homepage' options={{headerShown: false}} component={Homepage}/>
                         <TabsStack.Screen name='AppSettings' options={{headerShown: false}} component={AppSettings}/>
                         <TabsStack.Screen name='UserProfile' options={{headerShown: false}} component={UserProfile}/>
-                        <TabsStack.Screen name={'MakePost'} options={{headerShown: false}} component={MakePost} />
+                        <TabsStack.Screen name='MakePost' options={{headerShown: false}} component={MakePost} />
+                        <TabsStack.Screen name='CollegeList' options={{headerShown: false}} component={CollegeList} />
                     </TabsStack.Navigator>
             </KeyboardAvoidingView>
             <View style={styles.bottom_nav_container}>

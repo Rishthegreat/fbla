@@ -21,4 +21,11 @@
         </intent-filter>
       </activity>
     </application>
+      <queries>
+      <!-- Specific apps you share to -->
+      <package android:name="com.instagram.android" />
+      <intent>
+        <action android:name="android.intent.action.SEND"/>
+      </intent>
+    </queries>
 </manifest>

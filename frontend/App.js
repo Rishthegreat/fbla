@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import {Login, Signup, MainScreen} from './src/screens';
-import {StyleSheet, Text, View} from 'react-native';
+import {StatusBar, StyleSheet, Text, View} from 'react-native';
 import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {AuthProvider} from "./src/contexes/auth-context";
@@ -47,6 +47,7 @@ export const App = () => {
     }
     return (
         <AlertProvider>
+            <StatusBar barStyle={'dark-content'} backgroundColor={designChoices.white} />
             <ApolloProvider client={client}>
                 <AuthProvider>
                     <ProfileProvider>
