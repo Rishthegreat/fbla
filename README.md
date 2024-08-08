@@ -17,22 +17,6 @@ Recommendations: Include letters of recommendation and contact information for r
 
 Social Media Integration: Optionally link your other social media profiles to provide a more comprehensive view of your online presence.
 
-How to Download
-SparkSocial is available for download on both Android and iOS platforms.
-
-Android (Google Play Store)
-Open the Google Play Store on your Android device.
-In the search bar, type "SparkSocial" and press enter.
-Locate the SparkSocial app in the search results.
-Tap on the app, then click "Install" to download and install it on your device.
-Once the installation is complete, open the app, sign up, and start showcasing your achievements!
-iOS (App Store)
-Open the App Store on your iOS device.
-In the search tab, type "SparkSocial" and press enter.
-Find the SparkSocial app in the search results.
-Tap on the app, then click "Get" to download and install it on your device.
-After installation, open the app, sign up, and begin sharing your accomplishments with the world!
-Feedback and Support
-We value your feedback! If you encounter any issues or have suggestions for improvement, please contact us at support@sparksocial.com.
-
 Thank you for choosing SparkSocial - where your achievements shine!
+
+Note: this was a project completed for the FBLA Mobile App Development Competition
